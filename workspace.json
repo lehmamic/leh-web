@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "lehmamic.web": "apps/lehmamic.web",
+    "lehmamic.web-e2e": "apps/lehmamic.web-e2e"
+  }
+}
