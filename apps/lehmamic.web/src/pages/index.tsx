@@ -4,6 +4,8 @@ import type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsR
 import { Header } from '@components/Header';
 import { MaterialCover } from '@components/MaterialCover';
 import { getSettings } from '@services/settings.service';
+import * as React from 'react';
+import { ensureSerializable } from '@root/utils/serialization';
 
 interface HomePageProps {
   settings: Settings;
@@ -25,7 +27,7 @@ export const getServerSideProps: GetServerSideProps<HomePageProps> = async (cont
 
   return {
     props: {
-      settings: JSON.parse(JSON.stringify(settings)),
+      settings: ensureSerializable(settings),
     }
   }
 }

@@ -29,7 +29,10 @@
     "react-hook-form": "^7.30.0",
     "react-query": "^3.38.1",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.3.0"
+    "remark": "^14.0.2",
+    "strip-markdown": "^5.0.0",
+    "tslib": "^2.3.0",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
     "@emotion/babel-plugin": "11.9.2",
