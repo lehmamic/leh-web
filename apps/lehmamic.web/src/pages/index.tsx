@@ -1,7 +1,5 @@
 import { Settings } from '@models/settings';
 import type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
-import { ParsedUrlQuery } from 'querystring';
-import * as React from 'react';
 
 import { Header } from '@components/Header';
 import { MaterialCover } from '@components/MaterialCover';
@@ -15,7 +13,7 @@ const HomePage: NextPage<HomePageProps> = ({ settings }) => {
   return (
     <main>
       <Header title={settings.title} />
-      <MaterialCover coverImage="images/cover.jpeg" />
+      <MaterialCover coverImage={settings.coverImageUrl} />
     </main>
   );
 };

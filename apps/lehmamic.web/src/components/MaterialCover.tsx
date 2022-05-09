@@ -22,6 +22,7 @@ export const MaterialCover: React.FC<MaterialCoverProps> = ({ sx = [], coverImag
             overflow: 'hidden',
           },
           ...(Array.isArray(sx) ? sx : [sx]),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ] as any
       }
     ></Box>
