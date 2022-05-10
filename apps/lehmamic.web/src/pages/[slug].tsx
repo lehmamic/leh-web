@@ -29,17 +29,17 @@ const BlogPostPage: NextPage<BlogPostPageProps> = ({ settings, post }) => {
     <main>
       <Header title={settings.title} />
       <MaterialCover coverImage={post.imageUrl ?? settings.coverImageUrl} />
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" component="article">
         <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({ mt: theme.spacing(5) })}>
           {post.title}
         </Typography>
         <Typography
           variant="body1"
           color="text.secondary"
+          component="section"
           sx={(theme) => ({ a: { color: theme.palette.primary.main } })}
         >
           {content}
-          {/* <ReactMarkdown>{data?.content as string}</ReactMarkdown> */}
         </Typography>
       </Container>
     </main>
