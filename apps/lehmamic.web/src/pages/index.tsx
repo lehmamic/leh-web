@@ -1,22 +1,17 @@
-import { Settings } from '@models/settings';
 import type { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 
-import { Header } from '@components/Header';
-import { MaterialCover } from '@components/MaterialCover';
 import { getSettings } from '@services/settings.service';
-import * as React from 'react';
 import { ensureSerializable } from '@root/utils/serialization';
+import { Layout, LayoutProps } from '@components/Layout';
 
 interface HomePageProps {
-  settings: Settings;
+  layoutProps: LayoutProps;
 }
 
-const HomePage: NextPage<HomePageProps> = ({ settings }) => {
+const HomePage: NextPage<HomePageProps> = ({ layoutProps }) => {
   return (
-    <main>
-      <Header title={settings.title} />
-      <MaterialCover coverImage={settings.coverImageUrl} />
-    </main>
+    <Layout {...layoutProps}>
+    </Layout>
   );
 };
 
@@ -24,10 +19,15 @@ export default HomePage;
 
 export const getServerSideProps: GetServerSideProps<HomePageProps> = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<HomePageProps>> => {
   const settings = await getSettings();
+  const layoutProps: LayoutProps = {
+    ...settings,
+    imageUrl: settings.coverImageUrl,
+    path: '',
+   };
 
   return {
     props: {
-      settings: ensureSerializable(settings),
+      layoutProps: ensureSerializable(layoutProps),
     }
   }
 }

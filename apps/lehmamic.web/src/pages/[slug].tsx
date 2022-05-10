@@ -12,9 +12,10 @@ import { Settings } from '@models/settings';
 import { BlogPost } from '@models/blog-post';
 import { ParsedUrlQuery } from 'querystring';
 import { markdownToReact } from '@utils/transform-content';
+import { Layout, LayoutProps } from '@components/Layout';
 
 interface BlogPostPageProps {
-  settings: Settings;
+  layoutProps: LayoutProps;
   post: BlogPost
 }
 
@@ -22,34 +23,29 @@ interface BlogPostUrlQuery extends ParsedUrlQuery {
   slug: string;
 }
 
-const BlogPostPage: NextPage<BlogPostPageProps> = ({ settings, post }) => {
+const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post }) => {
   const content = useMemo(() => markdownToReact(post.content), [post.content]);
 
   return (
-    <main>
-      <Header title={settings.title} />
-      <MaterialCover coverImage={post.imageUrl ?? settings.coverImageUrl} />
-      <Container maxWidth="lg" component="article">
-        <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({ mt: theme.spacing(5) })}>
-          {post.title}
-        </Typography>
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          component="section"
-          sx={(theme) => ({ a: { color: theme.palette.primary.main } })}
-        >
-          {content}
-        </Typography>
-      </Container>
-    </main>
+    <Layout {...layoutProps}>
+      <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({ mt: theme.spacing(5) })}>
+        {post.title}
+      </Typography>
+      <Typography
+        variant="body1"
+        color="text.secondary"
+        component="section"
+        sx={(theme) => ({ a: { color: theme.palette.primary.main } })}
+      >
+        {content}
+      </Typography>
+    </Layout>
   );
 };
 
 export default BlogPostPage;
 
 export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostUrlQuery> = async (context: GetServerSidePropsContext<BlogPostUrlQuery>): Promise<GetServerSidePropsResult<BlogPostPageProps>> => {
-  const settings = await getSettings();
   const post = await getBlogPostBySlug(context.params?.slug)
   if (!post) {
     return {
@@ -57,9 +53,17 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
     };
   }
 
+  const settings = await getSettings();
+  const layoutProps: LayoutProps = {
+    ...settings,
+    contentTitle: post.title,
+    imageUrl: post.imageUrl ?? settings.coverImageUrl,
+    path: `blog/${post.slug}`,
+   };
+
   return {
     props: {
-      settings: ensureSerializable(settings),
+      layoutProps: ensureSerializable(layoutProps),
       post: ensureSerializable(post),
     }
   }

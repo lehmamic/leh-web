@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ title }) => {
             <Box>
               <Link color="inherit" underline="none" href="/">
                 <Typography variant="h6" color="inherit" noWrap>
-                 { title.toUpperCase() }
+                 { title?.toUpperCase() }
                 </Typography>
               </Link>
             </Box>
