@@ -10,7 +10,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = (props) => {
   return (
     <main>
       <PageHead {...props} />
-      <Header title={props.title} />
+      <Header title={props.title} socialMedia={props.socialMedia} />
       <MaterialCover coverImage={props.imageUrl ?? ''} />
       <Container maxWidth="lg" component="article">
         {props.children}

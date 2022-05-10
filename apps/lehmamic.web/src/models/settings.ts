@@ -8,6 +8,8 @@ export interface Settings {
   socialMedia: {
     twitter?: string;
     facebook?: string;
+    linkedIn?: string;
+    github?: string;
   }
 }
 

@@ -12,6 +12,8 @@ export interface PageHeaderProps {
   socialMedia: {
     twitter?: string;
     facebook?: string;
+    linkedIn?: string;
+    github?: string;
   };
  }
 
