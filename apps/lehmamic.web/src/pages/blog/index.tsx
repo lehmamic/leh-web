@@ -5,6 +5,7 @@ import { getBlogPosts } from "@services/blog-post.service";
 import { BlogPostCard } from "@components/BlogPostCard";
 import { ensureSerializable } from "@utils/serialization";
 import { Layout, LayoutProps } from "@components/Layout";
+import { Container } from "@mui/material";
 
 interface BlogPageProps {
   layoutProps: LayoutProps;
@@ -15,9 +16,11 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts }) => {
 
   return (
     <Layout {...layoutProps}>
-      {posts.map((post) => (
-        <BlogPostCard key={post._id} blogPost={post} />
-      ))}
+      <Container sx={(theme) => ({ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: theme.spacing(3) })}>
+        {posts.map((post) => (
+          <BlogPostCard key={post._id} blogPost={post} />
+        ))}
+      </Container>
     </Layout>
   );
 };
