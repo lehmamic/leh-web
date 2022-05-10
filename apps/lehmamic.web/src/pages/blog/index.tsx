@@ -38,8 +38,6 @@ export const getServerSideProps: GetServerSideProps<BlogPageProps> = async (cont
   const settings = await getSettings();
   const posts = await getBlogPosts()
 
-  console.dir(posts);
-
   return {
     props: {
       settings: ensureSerializable(settings),
