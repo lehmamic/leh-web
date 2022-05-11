@@ -7,8 +7,8 @@ export interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ title }) => {
   return (
-    <Container maxWidth="lg" component="footer">
-      <Typography variant="subtitle1" sx={(theme) => ({ my: theme.spacing(2) })}>
+    <Container maxWidth="md" component="footer" sx={(theme) => ({ pt: theme.spacing(2), pb: theme.spacing(1) })}>
+      <Typography variant="subtitle1" sx={(theme) => ({ color: theme.palette.grey[500]})}>
         {`© ${dayjs().year()} ${title}. All Rights Reserved.`}
       </Typography>
     </Container>

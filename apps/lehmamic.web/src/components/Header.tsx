@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
             elevation={0}
             component="header"
             sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="md">
         <Toolbar disableGutters>
           {/* title when large */}
           <Link color="inherit" underline="none" href="/" sx={{ display: { xs: 'none', md: 'flex' }}}>

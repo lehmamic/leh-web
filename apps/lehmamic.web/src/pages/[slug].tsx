@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useMemo } from 'react';
 
@@ -9,24 +9,31 @@ import { BlogPost } from '@models/blog-post';
 import { ParsedUrlQuery } from 'querystring';
 import { extractBlogPostDescription, markdownToReact } from '@utils/transform-content';
 import { Layout, LayoutProps } from '@components/Layout';
+import { User } from '@models/user';
+import { getUsersById } from '@services/user.service';
+import { PostMetadata } from '@components/PostMetadata';
+import { PostTags } from '@components/PostTags';
 
 interface BlogPostPageProps {
   layoutProps: LayoutProps;
-  post: BlogPost
+  post: BlogPost;
+  authors: User[];
 }
 
 interface BlogPostUrlQuery extends ParsedUrlQuery {
   slug: string;
 }
 
-const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post }) => {
+const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post, authors }) => {
   const content = useMemo(() => markdownToReact(post.content), [post.content]);
 
   return (
     <Layout {...layoutProps}>
-      <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({ mt: theme.spacing(5) })}>
+      <PostTags post={post} sx={(theme) => ({ mt: theme.spacing(5), mb: theme.spacing(1) })} />
+      <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({  })}>
         {post.title}
       </Typography>
+      <PostMetadata user={authors[0]} post={post} sx={(theme) => ({ my: theme.spacing(6) })} />
       <Typography
         variant="body1"
         color="text.secondary"
@@ -49,6 +56,10 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
     };
   }
 
+  console.dir(post);
+  const authors = await getUsersById(post.authors);
+  console.dir(authors);
+
   const settings = await getSettings();
   const layoutProps: LayoutProps = {
     ...settings,
@@ -62,6 +73,7 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
     props: {
       layoutProps: ensureSerializable(layoutProps),
       post: ensureSerializable(post),
+      authors: ensureSerializable(authors),
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Typography, CardContent, Card, CardMedia, CardActions, Chip, SxProps, Theme } from '@mui/material';
+import { Typography, CardContent, Card, CardMedia, CardActions, Chip, SxProps, Theme, Box } from '@mui/material';
 import * as React from 'react';
 import dayjs from 'dayjs';
 
@@ -25,10 +25,8 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
         sx={(theme) => ({
           backgroundColor: theme.palette.grey[100],
           boxShadow: 0,
-          width: '508px',
-          // padding: theme.spacing(2),
+          width: '405px',
           ':hover': {
-            // boxShadow: 3,
             cursor: 'pointer',
           },
         })}
@@ -51,12 +49,14 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
           </Typography>
         </CardContent>
         <CardActions sx={(theme) => ({ p: theme.spacing(2), borderTopWidth: 1, borderTopColor: theme.palette.divider, borderTopStyle: 'solid'})}>
-          <Typography variant="body2" component="span" sx={(theme) => ({ display: 'flex', alignItems: 'center', gap: theme.spacing(1) })}>
-            {dayjs(blogPost.publishedAt).format("D MMMM YYYY")}
+          <Box sx={(theme) => ({ display: 'flex', alignItems: 'center', gap: theme.spacing(1), flexWrap: 'wrap' })}>
+            <Typography variant="body2" component="span" noWrap sx={(theme) => ({ color: theme.palette.grey[700] })}>
+              {dayjs(blogPost.publishedAt).format("D MMMM YYYY")}
+            </Typography>
             {blogPost.tags.map(tag => (
-              <Chip key={tag} label={tag} size="small" />
-            ))}
-          </Typography>
+                <Chip key={tag} label={tag} size="small" />
+              ))}
+          </Box>
         </CardActions>
       </Card>
     </Link>
