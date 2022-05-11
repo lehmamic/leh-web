@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { MaterialCover } from "./MaterialCover";
 import { PageHead, PageHeaderProps } from "./PageHead";
@@ -15,6 +16,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = (props) => {
       <Container maxWidth="lg" component="article" sx={(theme) => ({ mt: theme.spacing(5) })}>
         {props.children}
       </Container>
+      <Footer title={props.title} />
     </main>
   );
 }

@@ -30,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
     <AppBar position="static"
             color="default"
             elevation={0}
+            component="header"
             sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}>
       <Container maxWidth="lg">
         <Toolbar disableGutters>
