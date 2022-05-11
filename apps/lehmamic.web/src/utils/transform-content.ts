@@ -1,3 +1,4 @@
+import { BlogPost } from '@models/blog-post';
 import { ReactElement } from './../../../../node_modules/rehype-react/lib/index.d';
 
 import { remark } from 'remark';
@@ -58,3 +59,8 @@ export const clampContent = (value: string, maxLength: number): string => {
 
   return `${value.substring(0, maxLength)}...`;
 };
+
+export const extractBlogPostDescription = (post: BlogPost): string => {
+  const description = post.description && post.description != '' ? post.description : removeMarkdown(post.content);
+  return clampContent(description, 265);
+}

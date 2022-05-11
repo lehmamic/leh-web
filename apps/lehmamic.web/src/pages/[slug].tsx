@@ -1,17 +1,13 @@
-import { Container, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
-import * as React from 'react';
 import { useMemo } from 'react';
 
-import { Header } from '@components/Header';
-import { MaterialCover } from '@components/MaterialCover';
 import { getBlogPostBySlug } from '@services/blog-post.service';
 import { getSettings } from '@services/settings.service';
 import { ensureSerializable } from '@utils/serialization';
-import { Settings } from '@models/settings';
 import { BlogPost } from '@models/blog-post';
 import { ParsedUrlQuery } from 'querystring';
-import { markdownToReact } from '@utils/transform-content';
+import { extractBlogPostDescription, markdownToReact } from '@utils/transform-content';
 import { Layout, LayoutProps } from '@components/Layout';
 
 interface BlogPostPageProps {
@@ -57,6 +53,7 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
   const layoutProps: LayoutProps = {
     ...settings,
     contentTitle: post.title,
+    description: extractBlogPostDescription(post),
     imageUrl: post.imageUrl ?? settings.coverImageUrl,
     path: `blog/${post.slug}`,
    };

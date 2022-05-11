@@ -5,7 +5,7 @@ import { getBlogPosts } from "@services/blog-post.service";
 import { BlogPostCard } from "@components/BlogPostCard";
 import { ensureSerializable } from "@utils/serialization";
 import { Layout, LayoutProps } from "@components/Layout";
-import { Container } from "@mui/material";
+import { Masonry } from "@mui/lab";
 
 interface BlogPageProps {
   layoutProps: LayoutProps;
@@ -16,11 +16,15 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts }) => {
 
   return (
     <Layout {...layoutProps}>
-      <Container sx={(theme) => ({ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: theme.spacing(3) })}>
+      <Masonry columns={{ xs: 1, md: 1, lg: 2 }}
+               spacing={3}
+               defaultColumns={2}
+               defaultSpacing={3}
+               defaultHeight={450}>
         {posts.map((post) => (
           <BlogPostCard key={post._id} blogPost={post} />
         ))}
-      </Container>
+      </Masonry>
     </Layout>
   );
 };

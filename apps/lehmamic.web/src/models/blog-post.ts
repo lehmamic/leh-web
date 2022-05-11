@@ -4,6 +4,7 @@ export interface BlogPost {
   _id: string;
   slug: string;
   title: string;
+  description?: string;
   imageUrl: string;
   content: string;
   tags: string[];
