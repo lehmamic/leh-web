@@ -13,6 +13,15 @@ const nextConfig = {
   images: {
     domains: ['ik.imagekit.io'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/blog',
+        permanent: true,
+      },
+    ]
+  },
 };
 
 module.exports = withNx(nextConfig);
