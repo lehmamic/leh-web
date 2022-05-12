@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { getBlogPostBySlug } from '@services/blog-post.service';
 import { getSettings } from '@services/settings.service';
 import { ensureSerializable } from '@utils/serialization';
-import { BlogPost } from '@models/blog-post';
+import { BlogPost, BlogPostType } from '@models/blog-post';
 import { ParsedUrlQuery } from 'querystring';
 import { extractBlogPostDescription, markdownToReact } from '@utils/transform-content';
 import { Layout, LayoutProps } from '@components/Layout';
@@ -29,11 +29,15 @@ const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post, authors 
 
   return (
     <Layout {...layoutProps}>
-      <PostTags post={post} sx={(theme) => ({ mt: theme.spacing(5), mb: theme.spacing(1) })} />
+      {post.type === BlogPostType.Post && (
+        <PostTags post={post} sx={(theme) => ({ mt: theme.spacing(5), mb: theme.spacing(1) })} />
+      )}
       <Typography gutterBottom variant="h4" component="h4" sx={(theme) => ({  })}>
         {post.title}
       </Typography>
-      <PostMetadata user={authors[0]} post={post} sx={(theme) => ({ my: theme.spacing(6) })} />
+      {post.type === BlogPostType.Post && (
+        <PostMetadata user={authors[0]} post={post} sx={(theme) => ({ my: theme.spacing(6) })} />
+      )}
       <Typography variant="body1"
                   component="section"
                   color="text.secondary"
