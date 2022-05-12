@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 import { BlogPost } from '@models/blog-post';
 
-import Link from './Link';
+import Link from '../Link';
 import { extractBlogPostDescription } from '@utils/transform-content';
 
 export interface BlogPostCardProps {

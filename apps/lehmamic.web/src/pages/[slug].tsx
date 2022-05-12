@@ -11,8 +11,8 @@ import { extractBlogPostDescription, markdownToReact } from '@utils/transform-co
 import { Layout, LayoutProps } from '@components/Layout';
 import { User } from '@models/user';
 import { getUsersById } from '@services/user.service';
-import { PostMetadata } from '@components/PostMetadata';
-import { PostTags } from '@components/PostTags';
+import { PostMetadata } from '@components/post/PostMetadata';
+import { PostTags } from '@components/post/PostTags';
 
 interface BlogPostPageProps {
   layoutProps: LayoutProps;
@@ -34,12 +34,10 @@ const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post, authors 
         {post.title}
       </Typography>
       <PostMetadata user={authors[0]} post={post} sx={(theme) => ({ my: theme.spacing(6) })} />
-      <Typography
-        variant="body1"
-        color="text.secondary"
-        component="section"
-        sx={(theme) => ({ a: { color: theme.palette.primary.main } })}
-      >
+      <Typography variant="body1"
+                  component="section"
+                  color="text.secondary"
+                  sx={(theme) => ({ pre: { backgroundColor: '#1E1E1E', borderRadius: '0.5em', p: theme.spacing(3) }})}>
         {content}
       </Typography>
     </Layout>

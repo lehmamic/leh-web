@@ -2,7 +2,7 @@ import { BlogPost } from "@models/blog-post";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { getSettings } from "@services/settings.service";
 import { getBlogPosts } from "@services/blog-post.service";
-import { BlogPostCard } from "@components/BlogPostCard";
+import { BlogPostCard } from "@components/post/BlogPostCard";
 import { ensureSerializable } from "@utils/serialization";
 import { Layout, LayoutProps } from "@components/Layout";
 import { Masonry } from "@mui/lab";

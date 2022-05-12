@@ -10,8 +10,11 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
+import rehypePrism from 'rehype-prism-plus/common';
 import rehypeReact, { Options } from 'rehype-react';
 import { createElement, Fragment } from 'react';
+import { PostImage } from '@components/post/content/PostImage';
+import { PostLink } from '@components/post/content/PostLink';
 
 export const removeMarkdown = (value: string): string =>{
   return String(remark()
@@ -24,7 +27,8 @@ export const markdownToReact = (value: string): ReactElement => {
     createElement,
     Fragment,
     components: {
-      // img: PostImage,
+      img: PostImage,
+      a: PostLink,
       // pre: PostPre,
       // h2: PostH2,
       // h3: PostH3,
@@ -47,6 +51,7 @@ export const markdownToReact = (value: string): ReactElement => {
         code: [...(defaultSchema.attributes?.code || []), 'className'],
       },
     })
+    .use(rehypePrism)
     .use(rehypeReact, rehypeReactOptions)
     .processSync(value)
     .result;

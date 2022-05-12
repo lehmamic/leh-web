@@ -21,12 +21,12 @@ export const PostMetadata: React.FC<PostAuthorInfoProps> = ({ user, post, sx = [
       ...(Array.isArray(sx) ? sx : [sx]),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ] as any}>
-      <Avatar alt={fullName} src={gravatarUrl} />
+      <Avatar alt={fullName} src={gravatarUrl} sx={{ width: 56, height: 56 }} />
       <Box sx={(theme) => ({ display: 'flex', flexDirection: 'column', ml: theme.spacing(2) })}>
-        <Typography variant="subtitle2" component="span" sx={(theme) => ({ lineHeight: 1.2 })}>
+        <Typography variant="subtitle1" component="span" sx={(theme) => ({ lineHeight: 1.4 })}>
           {fullName}
         </Typography>
-        <Typography variant="subtitle2" component="span" sx={(theme) => ({ lineHeight: 1.2, fontWeight: 400, color: theme.palette.grey[500] })}>
+        <Typography variant="subtitle1" component="span" sx={(theme) => ({ lineHeight: 1.4, fontWeight: 400, color: theme.palette.grey[500] })}>
           {dayjs(post.publishedAt).format("D MMMM YYYY")}
         </Typography>
       </Box>
