@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
       <Container maxWidth="md">
         <Toolbar disableGutters>
           {/* title when large */}
-          <Link color="inherit" underline="none" href="/" sx={{ display: { xs: 'none', md: 'flex' }}}>
+          <Link color="inherit" underline="none" href="/blog" sx={{ display: { xs: 'none', md: 'flex' }}}>
             <Typography variant="h6" color="inherit" noWrap>
               { title?.toUpperCase() }
             </Typography>
@@ -97,7 +97,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
                   variant="button"
                   color="text.primary"
                   underline="none"
-                  href={`https:www.facebook.com/${socialMedia.facebook}`}
+                  href={`https://www.facebook.com/${socialMedia.facebook}`}
                   sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
                 >
                   <Facebook />
@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
                   variant="button"
                   color="text.primary"
                   underline="none"
-                  href={`https:twitter.com/${socialMedia.twitter.replace('@', '')}`}
+                  href={`https://twitter.com/${socialMedia.twitter.replace('@', '')}`}
                   sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
                 >
                   <Twitter />
@@ -134,7 +134,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
           </Box>
 
           {/* title when small */}
-          <Link color="inherit" underline="none" href="/" sx={{
+          <Link color="inherit" underline="none" href="/blog" sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
@@ -193,7 +193,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
               variant="button"
               color="text.primary"
               underline="none"
-              href={`https:www.facebook.com/${socialMedia.facebook}`}
+              href={`https://www.facebook.com/${socialMedia.facebook}`}
               sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
             >
               <Facebook />
@@ -202,7 +202,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
               variant="button"
               color="text.primary"
               underline="none"
-              href={`https:twitter.com/${socialMedia.twitter.replace('@', '')}`}
+              href={`https://twitter.com/${socialMedia.twitter.replace('@', '')}`}
               sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
             >
               <Twitter />

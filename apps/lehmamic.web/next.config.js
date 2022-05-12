@@ -10,15 +10,19 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  reactStrictMode: true,
   images: {
     domains: ['ik.imagekit.io'],
+  },
+  experimental: {
+    scrollRestoration: true,
   },
   async redirects() {
     return [
       {
         source: '/',
         destination: '/blog',
-        permanent: true,
+        permanent: false,
       },
     ]
   },
