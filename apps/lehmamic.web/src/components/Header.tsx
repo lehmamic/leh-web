@@ -1,4 +1,4 @@
-import { Typography, AppBar, Toolbar, Container, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider } from '@mui/material';
+import { Typography, AppBar, Toolbar, Container, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider, SxProps, Theme } from '@mui/material';
 import { Box } from '@mui/system';
 import { Facebook, Github, Linkedin, Menu as MenuIcon, Twitter } from 'mdi-material-ui';
 import * as React from 'react';
@@ -12,10 +12,11 @@ export interface HeaderProps {
    facebook?: string;
    linkedIn?: string;
    github?: string;
- }
+ };
+ sx?: SxProps<Theme>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
+export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -31,7 +32,10 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia }) => {
             color="default"
             elevation={0}
             component="header"
-            sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}>
+            sx={[
+              { borderBottom: (theme) => `1px solid ${theme.palette.divider}` },
+              ...(Array.isArray(sx) ? sx : [sx]),
+            ]}>
       <Container maxWidth="md">
         <Toolbar disableGutters>
           {/* title when large */}

@@ -1,4 +1,4 @@
-import { BlogPost } from "@models/blog-post";
+import { BlogPost, BlogPostStatus, BlogPostType } from "@models/blog-post";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { getSettings } from "@services/settings.service";
 import { getBlogPosts } from "@services/blog-post.service";
@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps<BlogPageProps> = async (cont
     path: 'blog',
    };
 
-   const posts = await getBlogPosts()
+   const posts = await getBlogPosts({ type: BlogPostType.Post, status: BlogPostStatus.Published });
 
   return {
     props: {

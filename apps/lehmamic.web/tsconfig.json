@@ -20,10 +20,12 @@
       "@services/*": ["src/services/*"],
       "@models/*": ["src/models/*"],
       "@utils/*": ["src/utils/*"],
-      "@styles": ["src/styles/*"],
+      "@styles/*": ["src/styles/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@environment/*": ["src/environment/*"],
       "@root/*": ["src/*"],
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", "src/pages/api/posts/[id].ts.ignore"],
   "exclude": ["node_modules", "jest.config.ts"]
 }
