@@ -26,6 +26,6 @@
       "@root/*": ["src/*"],
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", "src/pages/api/posts/[id].ts.ignore"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", "src/pages/api/posts/[id].ts"],
   "exclude": ["node_modules", "jest.config.ts"]
 }

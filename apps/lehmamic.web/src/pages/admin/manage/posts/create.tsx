@@ -7,7 +7,9 @@ import { Autocomplete, Box, Button, Chip, Container, styled, TextField, Typograp
 import Link from "@components/Link";
 import { ChevronLeft, ContentSave } from "mdi-material-ui";
 import { Controller, useForm } from 'react-hook-form';
-import { BlogPost } from "@models/blog-post";
+import { BlogPost, CreateBlogPostRequest } from "@models/blog-post";
+import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
+import { useRouter } from "next/router";
 
 const Form = styled('form')(() => ({ display: 'flex', flexDirection: 'row', width: '100%', height: '100%' }));
 
@@ -33,6 +35,29 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
     // reset,
     formState: { errors, isValid },
   } = useForm<FormData>({ mode: 'all', reValidateMode: 'onChange' });
+  const router = useRouter();
+  const mutateCreateBlogPost = useCreateBlogPost();
+
+  const createBlogPost = (): void => {
+    const blogPostFormValues = getValues();
+
+    const blogPost: CreateBlogPostRequest = {
+      ...blogPostFormValues,
+      type: 'post',
+      authors: [],
+    };
+
+    mutateCreateBlogPost.mutate(blogPost, {
+      onSuccess: (result) => {
+        // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
+        router.push(`/admin/manage/posts/${result._id}`, undefined, { shallow: true });
+        // setBlogPostId(result.id);
+      },
+      onError: () => {
+        // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
+      },
+    });
+  };
 
   return (
     <Box sx={() => ({ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' })}>
@@ -48,8 +73,7 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
           variant="contained"
           color="primary"
           disabled={!isValid}
-          // onClick={navigateToNewBlogPost}
-          // className={clsx({ [classes.buttonSuccess]: mutation.isSuccess, [classes.buttonFailed]: mutation.isError })}
+          onClick={createBlogPost}
         >
           Create
         </Button>

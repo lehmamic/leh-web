@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   }
 
   async function getHomePageLastModified(posts: BlogPost[]) {
-    await import("../utils/dayjs.plugins");
+    await import("@utils/dayjs.plugins");
     return dayjs
       .max(
         [dayjs(homePageLastModified)].concat(

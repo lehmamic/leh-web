@@ -14,12 +14,23 @@ export const BlogPostType = {
   Post: 'post' as BlogPostType,
 };
 
+export interface CreateBlogPostRequest {
+  slug: string;
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  content: string;
+  type: BlogPostType;
+  tags: string[];
+  authors: string[];
+}
+
 export interface BlogPost {
   _id: string;
   slug: string;
   title: string;
   description?: string;
-  imageUrl: string;
+  imageUrl?: string;
   content: string;
   status: BlogPostStatus;
   type: BlogPostType;
@@ -27,5 +38,5 @@ export interface BlogPost {
   authors: string[];
   createdAt: Date;
   modifiedAt: Date;
-  publishedAt: Date;
+  publishedAt?: Date;
 }
