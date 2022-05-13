@@ -3,7 +3,7 @@ import { LayoutProps } from "@components/Layout";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
 import * as React from 'react';
-import { Box, Button, Container, styled, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Chip, Container, styled, TextField, Typography } from "@mui/material";
 import Link from "@components/Link";
 import { ChevronLeft, ContentSave } from "mdi-material-ui";
 import { Controller, useForm } from 'react-hook-form';
@@ -20,7 +20,10 @@ interface FormData {
   title: string;
   content: string;
   imageUrl?: string;
+  tags: string[];
 }
+
+const tags = ['ARCHITECTURE', 'CODE', 'SECURITY'];
 
 const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }) => {
   const {
@@ -143,6 +146,50 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
                   onChange={onChange}
                   onBlur={onBlur}
                   sx={(theme) => ({ width: '100%', pb: theme.spacing(3) })}
+                />
+              )}
+            />
+
+            {/* tags */}
+            <Controller
+              name="tags"
+              control={control}
+              rules={{}}
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                // <TextField
+                //   id="imageUrl"
+                //   label="imageUrl"
+                //   value={value}
+                //   error={!!error}
+                //   helperText={error?.message}
+                //   onChange={onChange}
+                //   onBlur={onBlur}
+                //   sx={(theme) => ({ width: '100%', pb: theme.spacing(3) })}
+                // />
+                <Autocomplete
+                  multiple
+                  id="tags"
+                  options={tags}
+                  value={value}
+                  freeSolo
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  renderTags={(value: readonly string[], getTagProps) =>
+                    value.map((option: string, index: number) => (
+                      // eslint-disable-next-line react/jsx-key
+                      <Chip size="small" variant="filled" label={option} {...getTagProps({ index })} />
+                    ))
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Tags"
+                      placeholder="Tags"
+                      error={!!error}
+                      helperText={error?.message}
+                    />
+                  )}
                 />
               )}
             />
