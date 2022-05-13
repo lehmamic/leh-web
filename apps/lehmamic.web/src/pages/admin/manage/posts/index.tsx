@@ -1,20 +1,29 @@
 import { AdminLayout } from "@components/admin/AdminLayout";
 import { LayoutProps } from "@components/Layout";
-import { BlogPostType } from "@models/blog-post";
-import { Box, Button, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { BlogPost, BlogPostType } from "@models/blog-post";
+import { AppBar, Box, Button, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useBlogPosts } from "@hooks/useBlogPosts";
-import { getBlogPosts } from "@services/blog-post.service";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { getStatusDisplayName } from "@models/blog-post.utils";
+import { useRouter } from "next/router";
 
 interface ManageBlogPostsPageProps {
   layoutProps: LayoutProps;
 }
 
 const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }) => {
+  const router = useRouter();
   const { data } = useBlogPosts(BlogPostType.Post, null);
+
+  const navigateToEditBlogPost = (post: BlogPost): void => {
+    router.push(`/admin/manage/posts/${post._id}`);
+  };
+
+  const navigateToNewBlogPost = (): void => {
+    router.push(`/admin/manage/posts/create`);
+  };
 
   return (
     <AdminLayout {...layoutProps}>
@@ -26,7 +35,7 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
             variant="contained"
             color="primary"
             // disabled={Object.keys(errors).length > 0}
-            // onClick={navigateToNewBlogPost}
+            onClick={navigateToNewBlogPost}
             // className={clsx({ [classes.buttonSuccess]: mutation.isSuccess, [classes.buttonFailed]: mutation.isError })}
           >
             New post
@@ -47,7 +56,7 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
             {data?.map((p) => (
               <TableRow
                 key={p._id}
-                // onClick={() => navigateToEditBlogPost(p)}
+                onClick={() => navigateToEditBlogPost(p)}
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
                   ':hover': { cursor: 'pointer', backgroundColor: theme.palette.grey[100] },
