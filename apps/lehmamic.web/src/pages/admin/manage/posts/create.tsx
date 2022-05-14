@@ -10,6 +10,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { BlogPost, CreateBlogPostRequest } from "@models/blog-post";
 import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 const Form = styled('form')(() => ({ display: 'flex', flexDirection: 'row', width: '100%', height: '100%' }));
 
@@ -226,17 +227,19 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
 
 export default CreateBlogPostsPage;
 
-export const getServerSideProps: GetServerSideProps<CreateBlogPostsPageProps> = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
-  const settings = await getSettings();
-  const layoutProps: LayoutProps = {
-    ...settings,
-    imageUrl: settings.coverImageUrl,
-    path: 'admin/manage/posts/create',
-    };
+export const getServerSideProps = withPageAuthRequired({
+  getServerSideProps: async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
+    const settings = await getSettings();
+    const layoutProps: LayoutProps = {
+      ...settings,
+      imageUrl: settings.coverImageUrl,
+      path: 'admin/manage/posts/create',
+      };
 
-  return {
-    props: {
-      layoutProps: ensureSerializable(layoutProps),
+    return {
+      props: {
+        layoutProps: ensureSerializable(layoutProps),
+      }
     }
-  }
-};
+  },
+});

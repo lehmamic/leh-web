@@ -8,6 +8,7 @@ import { ensureSerializable } from "@utils/serialization";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { getStatusDisplayName } from "@models/blog-post.utils";
 import { useRouter } from "next/router";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 interface ManageBlogPostsPageProps {
   layoutProps: LayoutProps;
@@ -81,17 +82,21 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
 
 export default ManageBlogPostsPage;
 
-export const getServerSideProps: GetServerSideProps<ManageBlogPostsPageProps> = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
-  const settings = await getSettings();
-  const layoutProps: LayoutProps = {
-    ...settings,
-    imageUrl: settings.coverImageUrl,
-    path: 'admin/manage/posts',
-   };
 
-  return {
-    props: {
-      layoutProps: ensureSerializable(layoutProps),
+export const getServerSideProps = withPageAuthRequired({
+  // returnTo: '/foo',
+  getServerSideProps: async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
+    const settings = await getSettings();
+    const layoutProps: LayoutProps = {
+      ...settings,
+      imageUrl: settings.coverImageUrl,
+      path: 'admin/manage/posts',
+     };
+
+    return {
+      props: {
+        layoutProps: ensureSerializable(layoutProps),
+      }
     }
   }
-};
+});
