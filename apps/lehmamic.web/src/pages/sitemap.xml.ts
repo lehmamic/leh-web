@@ -4,9 +4,11 @@ import { getBlogPosts } from '@services/blog-post.service';
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 
-function SiteMap() {
+const SiteMap = () => {
   // getServerSideProps will do the heavy lifting
 }
+
+export default SiteMap;
 
 const sitemapDateFormat = "YYYY-MM-DD";
 const homePageLastModified = "2022-04-30";
@@ -40,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
          </url>
        `;
          })
-         .join("")}
+         .join('')}
      </urlset>
    `;
   }
@@ -56,5 +58,3 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
       .format(sitemapDateFormat);
   }
 };
-
-export default SiteMap;
