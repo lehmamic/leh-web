@@ -26,6 +26,6 @@ export interface BlogPost {
   tags: string[];
   authors: string[];
   createdAt: Date;
-  modifedAt: Date;
+  modifiedAt: Date;
   publishedAt: Date;
 }

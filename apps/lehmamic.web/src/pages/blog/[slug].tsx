@@ -52,7 +52,7 @@ export default BlogPostPage;
 
 export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostUrlQuery> = async (context: GetServerSidePropsContext<BlogPostUrlQuery>): Promise<GetServerSidePropsResult<BlogPostPageProps>> => {
   const post = await getBlogPostBySlug(context.params?.slug)
-  if (!post) {
+  if (!post || post.type !== BlogPostType.Post) {
     return {
       notFound: true,
     };

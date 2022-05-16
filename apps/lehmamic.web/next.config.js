@@ -24,6 +24,41 @@ const nextConfig = {
         destination: '/blog',
         permanent: false,
       },
+      {
+        source: '/async-file-upload-with-nextjs',
+        destination: '/blog/async-file-upload-with-nextjs',
+        permanent: true,
+      },
+      {
+        source: '/welcome-to-my-new-blog',
+        destination: '/blog/welcome-to-my-new-blog',
+        permanent: true,
+      },
+      {
+        source: '/leveraging-existing-libraries-to-setup-a-console-application',
+        destination: '/blog/leveraging-existing-libraries-to-setup-a-console-application',
+        permanent: true,
+      },
+      {
+        source: '/implement-resource-based-authorization-with-angular',
+        destination: '/blog/implement-resource-based-authorization-with-angular',
+        permanent: true,
+      },
+      {
+        source: '/implement-resource-based-authorization-with-asp-net-core',
+        destination: '/blog/implement-resource-based-authorization-with-asp-net-core',
+        permanent: true,
+      },
+      {
+        source: '/syntax-highlighting-support-for-additional-languages',
+        destination: '/blog/syntax-highlighting-support-for-additional-languages',
+        permanent: true,
+      },
+      {
+        source: '/resource-based-authorization-model',
+        destination: '/blog/resource-based-authorization-model',
+        permanent: true,
+      },
     ]
   },
 };

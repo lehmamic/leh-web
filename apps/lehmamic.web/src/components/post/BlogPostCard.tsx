@@ -16,7 +16,7 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
   const content = React.useMemo(() => extractBlogPostDescription(blogPost), [blogPost]);
 
   return (
-    <Link underline="none" href={`/${blogPost.slug}`} sx={
+    <Link underline="none" href={`/blog/${blogPost.slug}`} sx={
       [
         ...(Array.isArray(sx) ? sx : [sx]),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

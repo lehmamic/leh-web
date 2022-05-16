@@ -1,3 +1,4 @@
+import { BlogPostType } from '@models/blog-post';
 import { getSettings } from './../services/settings.service';
 import { getAllBlogPosts, getBlogPosts } from './../services/blog-post.service';
 import dayjs from "dayjs";
@@ -24,14 +25,15 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     return `<?xml version="1.0" encoding="UTF-8"?>
      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
        <url>
-         <loc>${settings.baseUrl}/blog</loc>
+         <loc>${settings.baseUrl}blog</loc>
          <lastmod>${await getHomePageLastModified()}</lastmod>
        </url>
        ${(await getAllBlogPosts())
-         .map(({ slug, modifedAt }) => {
+         .map(({ type, slug, modifiedAt: modifedAt }) => {
+           const baseUrl = type === BlogPostType.Post ? `${settings.baseUrl}blog`: settings.baseUrl;
            return `
          <url>
-             <loc>${settings.baseUrl}/${slug}</loc>
+             <loc>${baseUrl}${slug}</loc>
              <lastmod>${dayjs(modifedAt).format(sitemapDateFormat)}</lastmod>
          </url>
        `;
@@ -46,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     return dayjs
       .max(
         [dayjs(homePageLastModified)].concat(
-          (await getAllBlogPosts()).map((p) => dayjs(p.modifedAt))
+          (await getAllBlogPosts()).map((p) => dayjs(p.modifiedAt))
         )
       )
       .format(sitemapDateFormat);
