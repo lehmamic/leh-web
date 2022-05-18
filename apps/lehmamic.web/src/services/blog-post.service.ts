@@ -45,3 +45,18 @@ export const createBlogPost = async (post: CreateBlogPostRequest): Promise<BlogP
   return { ...model, _id: result.insertedId }
 }
 
+export const getAllTags = async (): Promise<string[]> => {
+  const { db } = await connectToMongoDb();
+
+  const result = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).aggregate<{ tags: string[]; }>([
+    {
+      $unwind: "$tags"
+    },
+    {
+      $group: {_id: null, tags: { $addToSet: "$tags" }}
+    },
+  ]).toArray();
+
+  return result[0].tags.filter(t => !!t).sort((a, b) => a.localeCompare(b));
+}
+

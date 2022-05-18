@@ -1,16 +1,15 @@
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
+import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { LayoutProps } from "@components/Layout";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
-import * as React from 'react';
 import { Autocomplete, Box, Button, Chip, Container, styled, TextField, Typography } from "@mui/material";
-import Link from "@components/Link";
-import { ChevronLeft, ContentSave } from "mdi-material-ui";
+import { ChevronLeft } from "mdi-material-ui";
 import { Controller, useForm } from 'react-hook-form';
-import { BlogPost, CreateBlogPostRequest } from "@models/blog-post";
+import { CreateBlogPostRequest } from "@models/blog-post";
 import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { useTags } from "@hooks/useTags";
 
 const Form = styled('form')(() => ({ display: 'flex', flexDirection: 'row', width: '100%', height: '100%' }));
 
@@ -26,8 +25,6 @@ interface FormData {
   tags: string[];
 }
 
-const tags = ['ARCHITECTURE', 'CODE', 'SECURITY'];
-
 const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }) => {
   const {
     control,
@@ -37,6 +34,8 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
     formState: { errors, isValid },
   } = useForm<FormData>({ mode: 'all', reValidateMode: 'onChange' });
   const router = useRouter();
+
+  const { data: tags } = useTags();
   const mutateCreateBlogPost = useCreateBlogPost();
 
   const createBlogPost = (): void => {
@@ -194,7 +193,7 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
                 <Autocomplete
                   multiple
                   id="tags"
-                  options={tags}
+                  options={tags ?? []}
                   value={value}
                   freeSolo
                   onChange={onChange}
