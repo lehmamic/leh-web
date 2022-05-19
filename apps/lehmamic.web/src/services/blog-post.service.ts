@@ -4,6 +4,7 @@ import '@utils/dayjs.plugins';
 
 import { BlogPost, BlogPostStatus, BlogPostType, BLOGPOSTS_COLLECTION } from '@models/blog-post';
 import { connectToMongoDb } from '@utils/mongodb';
+import { ObjectId } from 'mongodb';
 
 export interface BlogPostFilter {
   type?: BlogPostType,
@@ -26,7 +27,7 @@ export const getBlogPostBySlug = async (slug: string | undefined): Promise<BlogP
   return post
 }
 
-export const getBlogPostById = async (id: string | undefined): Promise<BlogPost | null> => {
+export const getBlogPostById = async (id: ObjectId | undefined): Promise<BlogPost | null> => {
   const { db } = await connectToMongoDb();
   const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).findOne({ _id: id });
 
@@ -38,7 +39,7 @@ export const createBlogPost = async (post: CreateBlogPostRequest): Promise<BlogP
   const { db } = await connectToMongoDb();
 
   const utcNow = dayjs.utc().toDate();
-  const model: BlogPost = { ...post, _id: undefined as never, createdAt: utcNow, modifiedAt: utcNow, status: 'draft' };
+  const model: BlogPost = { ...post, _id: undefined as never, createdAt: utcNow, modifiedAt: utcNow, status: 'draft', authors: post.authors.map(a => new ObjectId(a)) };
 
   const result = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).insertOne(model);
 

@@ -80,23 +80,20 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
   );
 };
 
-export default ManageBlogPostsPage;
+export default withPageAuthRequired(ManageBlogPostsPage);
 
 
-export const getServerSideProps = withPageAuthRequired({
-  // returnTo: '/foo',
-  getServerSideProps: async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
-    const settings = await getSettings();
-    const layoutProps: LayoutProps = {
-      ...settings,
-      imageUrl: settings.coverImageUrl,
-      path: 'admin/manage/posts',
-     };
+export const getServerSideProps =  async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
+  const settings = await getSettings();
+  const layoutProps: LayoutProps = {
+    ...settings,
+    imageUrl: settings.coverImageUrl,
+    path: 'admin/manage/posts',
+    };
 
-    return {
-      props: {
-        layoutProps: ensureSerializable(layoutProps),
-      }
+  return {
+    props: {
+      layoutProps: ensureSerializable(layoutProps),
     }
   }
-});
+};

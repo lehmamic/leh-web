@@ -1,3 +1,5 @@
+import { ObjectId } from 'mongodb';
+
 export const BLOGPOSTS_COLLECTION = "posts";
 
 export type BlogPostStatus = 'draft' | 'published';
@@ -22,11 +24,11 @@ export interface CreateBlogPostRequest {
   content: string;
   type: BlogPostType;
   tags: string[];
-  authors: string[];
+  authors: ObjectId[];
 }
 
 export interface BlogPost {
-  _id: string;
+  _id: ObjectId;
   slug: string;
   title: string;
   description?: string;
@@ -35,7 +37,7 @@ export interface BlogPost {
   status: BlogPostStatus;
   type: BlogPostType;
   tags: string[];
-  authors: string[];
+  authors: ObjectId[];
   createdAt: Date;
   modifiedAt: Date;
   publishedAt?: Date;

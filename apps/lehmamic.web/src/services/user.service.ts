@@ -9,3 +9,12 @@ export const getUsersById = async (userIds: string[]): Promise<User[]> => {
 
   return users
 }
+
+export const getUsers = async (): Promise<User[]> => {
+  const { db } = await connectToMongoDb();
+  const users = await db.collection<User>(USERS_COLLECTION)
+    .find()
+    .toArray();
+
+  return users
+}

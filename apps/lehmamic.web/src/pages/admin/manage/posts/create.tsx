@@ -8,9 +8,9 @@ import { Controller, useForm } from 'react-hook-form';
 import { CreateBlogPostRequest } from "@models/blog-post";
 import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired, useUser } from "@auth0/nextjs-auth0";
 import { useTags } from "@hooks/useTags";
-import { useEffect } from "react";
+import { useUsers } from "@hooks/useUsers";
 
 const Form = styled('form')(() => ({ display: 'flex', flexDirection: 'row', width: '100%', height: '100%' }));
 
@@ -32,21 +32,27 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
     setValue,
     getValues,
     formState: { isValid },
-  } = useForm<FormData>({ mode: 'all', reValidateMode: 'onChange' });
+  } = useForm<FormData>({ mode: 'all', reValidateMode: 'onChange', defaultValues: { slug: '', title: '', content: '', imageUrl: '', tags: [] } });
 
   const router = useRouter();
+  const { user } = useUser();
 
   const { data: tags } = useTags();
+  const { data: users } = useUsers();
   const mutateCreateBlogPost = useCreateBlogPost();
 
   const createBlogPost = (): void => {
     const blogPostFormValues = getValues();
 
+    const author = users?.find(u => u.userId === user?.sub);
     const blogPost: CreateBlogPostRequest = {
       ...blogPostFormValues,
       type: 'post',
-      authors: [],
+      authors: author ? [author._id] : [],
     };
+
+
+    // debugger;
 
     mutateCreateBlogPost.mutate(blogPost, {
       onSuccess: (result) => {
@@ -146,7 +152,7 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
                 <TextField
                   id="slug"
                   label="Slug"
-                  value={value}
+                  defaultValue=''
                   error={!!error}
                   helperText={error?.message}
                   onChange={onChange}
@@ -207,21 +213,19 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
   );
 };
 
-export default CreateBlogPostsPage;
+export default withPageAuthRequired(CreateBlogPostsPage);
 
-export const getServerSideProps = withPageAuthRequired({
-  getServerSideProps: async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
-    const settings = await getSettings();
-    const layoutProps: LayoutProps = {
-      ...settings,
-      imageUrl: settings.coverImageUrl,
-      path: 'admin/manage/posts/create',
-      };
+export const getServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
+  const settings = await getSettings();
+  const layoutProps: LayoutProps = {
+    ...settings,
+    imageUrl: settings.coverImageUrl,
+    path: 'admin/manage/posts/create',
+    };
 
-    return {
-      props: {
-        layoutProps: ensureSerializable(layoutProps),
-      }
+  return {
+    props: {
+      layoutProps: ensureSerializable(layoutProps),
     }
-  },
-});
+  }
+};
