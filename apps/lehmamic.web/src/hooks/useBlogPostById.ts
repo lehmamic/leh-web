@@ -4,13 +4,13 @@ import { useQuery } from 'react-query';
 import { environment } from '@environment/environment';
 import { BlogPost } from '@models/blog-post';
 
-export const fetchBlogPost = async (slug: string) => {
-  const url = `${environment.baseApiUrl}/posts/${slug}`;
+export const fetchBlogPostById = async (id: string) => {
+  const url = `${environment.baseApiUrl}/posts/${id}`;
   const response = await axios.get<BlogPost>(url);
 
   return response.data;
 };
 
-export const useBlogPost = (slug: string) => {
-  return useQuery(['posts', slug], () => fetchBlogPost(slug));
+export const useBlogPostById = (id: string) => {
+  return useQuery(['posts', id], () => fetchBlogPostById(id));
 };

@@ -1,7 +1,6 @@
 import HttpStatus from 'http-status-codes';
 import { withValidation } from 'next-validations';
 
-import { BlogPost } from '@models/blog-post';
 import { BlogPostValidator } from '@models/blog-post.validator';
 import { getBlogPostById } from '@services/blog-post.service';
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
@@ -20,11 +19,11 @@ handler.get(async (req, res) => {
   res.status(HttpStatus.OK).json(post);
 });
 
-const validate = withValidation({
-  schema: BlogPostValidator,
-  type: 'Joi',
-  mode: 'body',
-});
+// const validate = withValidation({
+//   schema: BlogPostValidator,
+//   type: 'Joi',
+//   mode: 'body',
+// });
 
 // handler.put(validate(), async (req, res) => {
 //   const { id } = req.query;

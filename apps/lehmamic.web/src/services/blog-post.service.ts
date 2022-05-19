@@ -27,9 +27,9 @@ export const getBlogPostBySlug = async (slug: string | undefined): Promise<BlogP
   return post
 }
 
-export const getBlogPostById = async (id: ObjectId | undefined): Promise<BlogPost | null> => {
+export const getBlogPostById = async (id: string | undefined): Promise<BlogPost | null> => {
   const { db } = await connectToMongoDb();
-  const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).findOne({ _id: id });
+  const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).findOne({ _id: new ObjectId(id) });
 
   return post
 }

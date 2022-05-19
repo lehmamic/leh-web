@@ -58,9 +58,7 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
     };
   }
 
-  console.dir(post);
-  const authors = await getUsersById(post.authors);
-  console.dir(authors);
+  const authors = await getUsersById(post.authors.map(a => a.toString()));
 
   const settings = await getSettings();
   const layoutProps: LayoutProps = {

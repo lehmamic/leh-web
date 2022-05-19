@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { LayoutProps } from "@components/Layout";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
@@ -42,14 +42,18 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
     });
   };
 
+  const navigateBack = () => {
+    router.push(`/admin/manage/posts`, undefined, { shallow: true });
+  };
+
   return (
-    <BlogPostForm tags={tags} onSave={createBlogPost} />
+    <BlogPostForm tags={tags} onSave={createBlogPost} onBack={navigateBack} />
   );
 };
 
 export default withPageAuthRequired(CreateBlogPostsPage);
 
-export const getServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
+export const getServerSideProps: GetServerSideProps<CreateBlogPostsPageProps> = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<CreateBlogPostsPageProps>> => {
   const settings = await getSettings();
   const layoutProps: LayoutProps = {
     ...settings,

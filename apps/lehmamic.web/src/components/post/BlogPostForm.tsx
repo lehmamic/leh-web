@@ -1,5 +1,6 @@
 import { Form } from "@components/Form";
 import { SimpleMDE } from "@components/SimpleMDE";
+import { BlogPost } from "@models/blog-post";
 import { Autocomplete, Box, Button, Chip, Container, FormHelperText, SxProps, TextField, Theme, Typography } from "@mui/material";
 import { ChevronLeft } from "mdi-material-ui";
 import { useMemo } from "react";
@@ -7,7 +8,9 @@ import { Controller, useForm } from "react-hook-form";
 
 export interface BlogPostFormProps {
   tags?: string[];
+  post?: BlogPost;
   onSave?: (data: FormData) => void;
+  onBack?: () => void;
   sx?: SxProps<Theme>;
 }
 
@@ -19,7 +22,7 @@ export interface FormData {
   tags: string[];
 }
 
-export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, onSave, sx = [] }: BlogPostFormProps) => {
+export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onBack, sx = [] }: BlogPostFormProps) => {
   const {
     control,
     setValue,
@@ -28,7 +31,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, onSave, sx = [
   } = useForm<FormData>({
     mode: 'all',
     reValidateMode: 'onChange',
-    defaultValues: { slug: '', title: '', content: '', imageUrl: '', tags: [] },
+    defaultValues: { slug: post?.slug ?? '', title: post?.title ?? '', content: post?.content ?? '', imageUrl: post?.imageUrl ?? '', tags: post?.tags ?? [] },
   });
 
   const simpleMDEOptions = useMemo<EasyMDE.Options>(() => ({
@@ -44,13 +47,19 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, onSave, sx = [
     }
   };
 
+  const navigateBack = () => {
+    if (onBack) {
+      onBack();
+    }
+  }
+
   return (
     <Box sx={() => [
       { display: 'flex', flexDirection: 'column', width: '100%', height: '100%' },
       ...(Array.isArray(sx) ? sx : [sx]),
     ] as any}>
     <Box sx={(theme) => ({ display: 'flex', flex: '0 0 auto', alignItems: 'center', mt: theme.spacing(3), px: theme.spacing(3) })}>
-      <Button sx={{ display: 'inline-flex' }}>
+      <Button sx={{ display: 'inline-flex' }} onClick={navigateBack}>
         <ChevronLeft /> Posts
       </Button>
       <Typography color="text.secondary">{
@@ -63,7 +72,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, onSave, sx = [
         disabled={!isValid}
         onClick={saveChanges}
       >
-        Create
+        Save
       </Button>
     </Box>
 
@@ -138,7 +147,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, onSave, sx = [
               <TextField
                 id="slug"
                 label="Slug"
-                defaultValue=''
+                value={value}
                 error={!!error}
                 helperText={error?.message}
                 onChange={onChange}

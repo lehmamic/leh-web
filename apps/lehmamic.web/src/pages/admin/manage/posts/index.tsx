@@ -1,7 +1,7 @@
 import { AdminLayout } from "@components/admin/AdminLayout";
 import { LayoutProps } from "@components/Layout";
 import { BlogPost, BlogPostType } from "@models/blog-post";
-import { AppBar, Box, Button, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useBlogPosts } from "@hooks/useBlogPosts";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
@@ -83,7 +83,7 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
 export default withPageAuthRequired(ManageBlogPostsPage);
 
 
-export const getServerSideProps =  async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
+export const getServerSideProps: GetServerSideProps<ManageBlogPostsPageProps> = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<ManageBlogPostsPageProps>> => {
   const settings = await getSettings();
   const layoutProps: LayoutProps = {
     ...settings,
