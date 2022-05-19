@@ -10,6 +10,7 @@ import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useTags } from "@hooks/useTags";
+import { useEffect } from "react";
 
 const Form = styled('form')(() => ({ display: 'flex', flexDirection: 'row', width: '100%', height: '100%' }));
 
@@ -28,11 +29,11 @@ interface FormData {
 const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }) => {
   const {
     control,
-    // setValue,
+    setValue,
     getValues,
-    // reset,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<FormData>({ mode: 'all', reValidateMode: 'onChange' });
+
   const router = useRouter();
 
   const { data: tags } = useTags();
@@ -175,45 +176,27 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
             />
 
             {/* tags */}
-            <Controller
-              name="tags"
-              control={control}
-              rules={{}}
-              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-                // <TextField
-                //   id="imageUrl"
-                //   label="imageUrl"
-                //   value={value}
-                //   error={!!error}
-                //   helperText={error?.message}
-                //   onChange={onChange}
-                //   onBlur={onBlur}
-                //   sx={(theme) => ({ width: '100%', pb: theme.spacing(3) })}
-                // />
-                <Autocomplete
-                  multiple
-                  id="tags"
-                  options={tags ?? []}
-                  value={value}
-                  freeSolo
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => (
-                      // eslint-disable-next-line react/jsx-key
-                      <Chip size="small" variant="filled" label={option} {...getTagProps({ index })} />
-                    ))
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Tags"
-                      placeholder="Tags"
-                      error={!!error}
-                      helperText={error?.message}
-                    />
-                  )}
+            <Autocomplete
+              id="tags"
+              multiple
+              options={tags ?? []}
+              freeSolo
+              onChange={(data, value) => {
+                setValue("tags", value);
+              }}
+              renderTags={(value: readonly string[], getTagProps) =>
+                value.map((option: string, index: number) => (
+                  // eslint-disable-next-line react/jsx-key
+                  <Chip size="small" variant="filled" label={option} {...getTagProps({ index })} />
+                ))
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  name="tags"
+                  label="Tags"
+                  placeholder="Tags"
+                  variant="outlined"
                 />
               )}
             />
