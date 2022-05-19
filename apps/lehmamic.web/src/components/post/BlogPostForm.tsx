@@ -1,6 +1,6 @@
 import { Form } from "@components/Form";
 import { SimpleMDE } from "@components/SimpleMDE";
-import { BlogPost } from "@models/blog-post";
+import { BlogPost, BlogPostStatus, getStatusDisplayName } from "@models/blog-post";
 import { Autocomplete, Box, Button, Chip, Container, FormHelperText, SxProps, TextField, Theme, Typography } from "@mui/material";
 import { ChevronLeft } from "mdi-material-ui";
 import { useMemo } from "react";
@@ -62,9 +62,9 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
       <Button sx={{ display: 'inline-flex' }} onClick={navigateBack}>
         <ChevronLeft /> Posts
       </Button>
-      <Typography color="text.secondary">{
-      // getStatusText()
-      }</Typography>
+      <Typography color="text.secondary" sx={(theme) => ({ ml: theme.spacing(2) })}>
+        {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
+      </Typography>
       <Box sx={{ flex: '1 0 auto' }} />
       <Button
         variant="contained"
@@ -177,27 +177,38 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
           />
 
           {/* tags */}
-          <Autocomplete
-            id="tags"
-            multiple
-            options={tags ?? []}
-            freeSolo
-            onChange={(data, value) => {
-              setValue("tags", value);
-            }}
-            renderTags={(value: readonly string[], getTagProps) =>
-              value.map((option: string, index: number) => (
-                // eslint-disable-next-line react/jsx-key
-                <Chip size="small" variant="filled" label={option} {...getTagProps({ index })} />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                name="tags"
-                label="Tags"
-                placeholder="Tags"
-                variant="outlined"
+          <Controller
+            name="tags"
+            control={control}
+            rules={{}}
+            render={({ field: { onBlur, value }, fieldState: { error } }) => (
+              <Autocomplete
+                id="tags"
+                multiple
+                options={tags ?? []}
+                freeSolo
+                clearIcon={false}
+                value={value}
+                isOptionEqualToValue={(option, value) => option === value}
+                onChange={(e, values) => setValue("tags", values)}
+                onBlur={onBlur}
+                renderTags={(value: readonly string[], getTagProps) =>
+                  value.map((option: string, index: number) => (
+                    // eslint-disable-next-line react/jsx-key
+                    <Chip size="small" variant="filled" label={option} {...getTagProps({ index })} />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="tags"
+                    label="Tags"
+                    placeholder="Tags"
+                    variant="outlined"
+                    error={!!error}
+                    helperText={error?.message}
+                  />
+                )}
               />
             )}
           />

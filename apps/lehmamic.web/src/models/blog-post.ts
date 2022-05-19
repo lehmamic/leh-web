@@ -25,7 +25,7 @@ export interface CreateBlogPostRequest {
   type: BlogPostType;
   tags: string[];
   authors: ObjectId[];
-}
+};
 
 export interface BlogPost {
   _id: ObjectId;
@@ -41,4 +41,16 @@ export interface BlogPost {
   createdAt: Date;
   modifiedAt: Date;
   publishedAt?: Date;
-}
+};
+
+export const getStatusDisplayName = (status: BlogPostStatus): string => {
+  if (status === 'published') {
+    return 'Published';
+  }
+
+  if (status === 'draft') {
+    return 'Draft';
+  }
+
+  throw new Error('Unknown blog post status');
+};
