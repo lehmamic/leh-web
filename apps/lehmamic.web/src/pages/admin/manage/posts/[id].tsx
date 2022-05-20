@@ -2,6 +2,7 @@ import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { LayoutProps } from "@components/Layout";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
 import { useBlogPostById } from "@hooks/useBlogPostById";
+import { useDeleteBlogPost } from "@hooks/useDeleteBlogPost";
 import { useTags } from "@hooks/useTags";
 import { useUpdateBlogPost } from "@hooks/useUpdateBlogPost";
 import { useUsers } from "@hooks/useUsers";
@@ -30,6 +31,8 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
   const { data: users } = useUsers();
   const { data: post } = useBlogPostById(id);
   const mutateUpdateBlogPost = useUpdateBlogPost();
+  const mutateDeleteBlogPost = useDeleteBlogPost();
+
 
   const updateBlogPost = (formValues: FormData): void => {
     const author = users?.find(u => u.userId === user?.sub);
@@ -50,12 +53,25 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
     });
   };
 
+  const deleteBlogPost = (): void => {
+    mutateDeleteBlogPost.mutate(id , {
+      onSuccess: (result) => {
+        // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
+        router.push(`/admin/manage/posts`, undefined, { shallow: true });
+        // setBlogPostId(result.id);
+      },
+      onError: () => {
+        // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
+      },
+    });
+  }
+
   const navigateBack = () => {
     router.push(`/admin/manage/posts`, undefined, { shallow: true });
   };
 
   return (
-    <BlogPostForm tags={tags} post={post} onSave={updateBlogPost} onBack={navigateBack} />
+    <BlogPostForm tags={tags} post={post} onSave={updateBlogPost} onDelete={deleteBlogPost} onBack={navigateBack} />
   );
 };
 
