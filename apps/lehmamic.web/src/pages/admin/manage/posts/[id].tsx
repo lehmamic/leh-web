@@ -3,8 +3,9 @@ import { LayoutProps } from "@components/Layout";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
 import { useBlogPostById } from "@hooks/useBlogPostById";
 import { useTags } from "@hooks/useTags";
+import { useUpdateBlogPost } from "@hooks/useUpdateBlogPost";
 import { useUsers } from "@hooks/useUsers";
-import { BlogPostType } from "@models/blog-post";
+import { BlogPostType, CreateOrUpdateBlogPostRequest } from "@models/blog-post";
 import { getBlogPostById } from "@services/blog-post.service";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
@@ -28,18 +29,17 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
   const { data: tags } = useTags();
   const { data: users } = useUsers();
   const { data: post } = useBlogPostById(id);
-  // const mutateCreateBlogPost = useCreateBlogPost();
+  const mutateUpdateBlogPost = useUpdateBlogPost();
 
   const updateBlogPost = (formValues: FormData): void => {
-    /*
     const author = users?.find(u => u.userId === user?.sub);
-    const blogPost: CreateBlogPostRequest = {
+    const blogPost: CreateOrUpdateBlogPostRequest = {
       ...formValues,
       type: 'post',
       authors: author ? [author._id] : [],
     };
 
-    mutateCreateBlogPost.mutate(blogPost, {
+    mutateUpdateBlogPost.mutate({ id, blogPost }, {
       onSuccess: (result) => {
         // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
         router.push(`/admin/manage/posts/${result._id}`, undefined, { shallow: true });
@@ -49,7 +49,6 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
         // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
       },
     });
-    */
   };
 
   const navigateBack = () => {

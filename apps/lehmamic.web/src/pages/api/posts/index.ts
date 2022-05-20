@@ -2,7 +2,7 @@ import HttpStatus from 'http-status-codes';
 
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
 import { BlogPostFilter, createBlogPost, getBlogPosts } from '@services/blog-post.service';
-import { BlogPostType, BlogPostStatus, CreateBlogPostRequest } from '@models/blog-post';
+import { BlogPostType, BlogPostStatus, CreateOrUpdateBlogPostRequest } from '@models/blog-post';
 
 const handler = nextConnectRequestHandler();
 
@@ -31,7 +31,7 @@ handler.get(async (req, res) => {
 
 // handler.post(validate(), async (req, res) => {
 handler.post(async (req, res) => {
-  const createRequest = req.body as CreateBlogPostRequest;
+  const createRequest = req.body as CreateOrUpdateBlogPostRequest;
 
   const createdPost = await createBlogPost(createRequest);
 

@@ -16,7 +16,7 @@ export const BlogPostType = {
   Post: 'post' as BlogPostType,
 };
 
-export interface CreateBlogPostRequest {
+export interface CreateOrUpdateBlogPostRequest {
   slug: string;
   title: string;
   description?: string;

@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { LayoutProps } from "@components/Layout";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
-import { CreateBlogPostRequest } from "@models/blog-post";
+import { CreateOrUpdateBlogPostRequest } from "@models/blog-post";
 import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
 import { withPageAuthRequired, useUser } from "@auth0/nextjs-auth0";
@@ -24,7 +24,7 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
 
   const createBlogPost = (formValues: FormData): void => {
     const author = users?.find(u => u.userId === user?.sub);
-    const blogPost: CreateBlogPostRequest = {
+    const blogPost: CreateOrUpdateBlogPostRequest = {
       ...formValues,
       type: 'post',
       authors: author ? [author._id] : [],

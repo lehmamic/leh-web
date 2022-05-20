@@ -1,4 +1,4 @@
-import { CreateBlogPostRequest } from './../models/blog-post';
+import { CreateOrUpdateBlogPostRequest } from './../models/blog-post';
 import dayjs from 'dayjs';
 import '@utils/dayjs.plugins';
 
@@ -17,33 +17,62 @@ export const getBlogPosts = async (filter: BlogPostFilter = { }): Promise<BlogPo
     .sort({ publishedAt: -1 })
     .toArray();
 
-  return posts
+  return posts;
 }
 
 export const getBlogPostBySlug = async (slug: string | undefined): Promise<BlogPost | null> => {
   const { db } = await connectToMongoDb();
   const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).findOne({ slug: slug });
 
-  return post
+  return post;
 }
 
 export const getBlogPostById = async (id: string | undefined): Promise<BlogPost | null> => {
   const { db } = await connectToMongoDb();
   const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).findOne({ _id: new ObjectId(id) });
 
-  return post
+  return post;
 }
 
-export const createBlogPost = async (post: CreateBlogPostRequest): Promise<BlogPost> => {
+export const createBlogPost = async (request: CreateOrUpdateBlogPostRequest): Promise<BlogPost> => {
 
   const { db } = await connectToMongoDb();
 
   const utcNow = dayjs.utc().toDate();
-  const model: BlogPost = { ...post, _id: undefined as never, createdAt: utcNow, modifiedAt: utcNow, status: 'draft', authors: post.authors.map(a => new ObjectId(a)) };
+  const model: BlogPost = { ...request, _id: undefined as never, createdAt: utcNow, modifiedAt: utcNow, status: 'draft', authors: request.authors.map(a => new ObjectId(a)) };
 
   const result = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).insertOne(model);
 
-  return { ...model, _id: result.insertedId }
+  return { ...model, _id: result.insertedId };
+}
+
+export const updateBlogPost = async (id: string, request: CreateOrUpdateBlogPostRequest): Promise<BlogPost | null> => {
+
+  const { db } = await connectToMongoDb();
+
+  const post = await getBlogPostById(id);
+  if (! post) {
+    return null;
+  }
+
+  const utcNow = dayjs.utc().toDate();
+  const model: BlogPost = {
+    ...post,
+    ...request,
+    modifiedAt: utcNow,
+    authors: request.authors.map(a => new ObjectId(a)),
+   };
+
+  await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).replaceOne({ _id: new ObjectId(id) }, model);
+
+  return model;
+}
+
+export const deleteBlogPost = async (id: string): Promise<void> => {
+
+  const { db } = await connectToMongoDb();
+
+  await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).deleteOne({ _id: new ObjectId(id) });
 }
 
 export const getAllTags = async (): Promise<string[]> => {
@@ -58,6 +87,8 @@ export const getAllTags = async (): Promise<string[]> => {
     },
   ]).toArray();
 
-  return result[0].tags.filter(t => !!t).sort((a, b) => a.localeCompare(b));
+  return result[0].tags
+    .filter(t => !!t)
+    .sort((a, b) => a.localeCompare(b));
 }
 

@@ -2,14 +2,15 @@ import { Form } from "@components/Form";
 import { SimpleMDE } from "@components/SimpleMDE";
 import { BlogPost, BlogPostStatus, getStatusDisplayName } from "@models/blog-post";
 import { Autocomplete, Box, Button, Chip, Container, FormHelperText, SxProps, TextField, Theme, Typography } from "@mui/material";
-import { ChevronLeft } from "mdi-material-ui";
-import { useMemo } from "react";
+import { ChevronLeft, TrashCanOutline } from "mdi-material-ui";
+import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export interface BlogPostFormProps {
   tags?: string[];
   post?: BlogPost;
   onSave?: (data: FormData) => void;
+  onDelete?: () => void;
   onBack?: () => void;
   sx?: SxProps<Theme>;
 }
@@ -22,17 +23,7 @@ export interface FormData {
   tags: string[];
 }
 
-export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onBack, sx = [] }: BlogPostFormProps) => {
-  const {
-    control,
-    setValue,
-    getValues,
-    formState: { isValid },
-  } = useForm<FormData>({
-    mode: 'all',
-    reValidateMode: 'onChange',
-    defaultValues: { slug: post?.slug ?? '', title: post?.title ?? '', content: post?.content ?? '', imageUrl: post?.imageUrl ?? '', tags: post?.tags ?? [] },
-  });
+export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onDelete, onBack, sx = [] }: BlogPostFormProps) => {
 
   const simpleMDEOptions = useMemo<EasyMDE.Options>(() => ({
     hideIcons: ['preview', 'side-by-side', 'fullscreen', 'guide'],
@@ -40,10 +31,41 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
     status: false,
   }), []);
 
-  const saveChanges = () => {
+  const createDefaultValues = (post?: BlogPost) : FormData => {
+    return {
+      slug: post?.slug ?? '',
+      title: post?.title ?? '',
+      content: post?.content ?? '',
+      imageUrl: post?.imageUrl ?? '',
+      tags: post?.tags ?? [],
+    };
+  }
+
+  const {
+    control,
+    setValue,
+    getValues,
+    reset,
+    formState: { isValid },
+  } = useForm<FormData>({
+    mode: 'all',
+    reValidateMode: 'onChange',
+    defaultValues: useMemo(() => createDefaultValues(post), [post]),
+  });
+
+  // required to set the real default value after the loading request returns
+  useEffect(() => reset(createDefaultValues(post)), [reset, post]);
+
+  const saveBlogPost = () => {
     if (onSave) {
       const formValues = getValues();
       onSave(formValues);
+    }
+  };
+
+  const deleteBlogPost = () => {
+    if (onDelete) {
+      onDelete();
     }
   };
 
@@ -66,11 +88,13 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
         {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
       </Typography>
       <Box sx={{ flex: '1 0 auto' }} />
+      {post && post.status === BlogPostStatus.Draft && (<Button sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
+      {post && post.status === BlogPostStatus.Published && (<Button sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
       <Button
         variant="contained"
         color="primary"
         disabled={!isValid}
-        onClick={saveChanges}
+        onClick={saveBlogPost}
       >
         Save
       </Button>
@@ -212,6 +236,18 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
               />
             )}
           />
+
+          {!!post && (
+            <Button
+              color="error"
+              variant="outlined"
+              // disabled={mutateDeleteBlogPost.isLoading}
+              onClick={deleteBlogPost}
+              sx={(theme) => ({ mt: theme.spacing(3), width: '100%' })}
+            >
+              <TrashCanOutline /> Delete post
+            </Button>
+          )}
         </Box>
       </Form>
     </Box>
