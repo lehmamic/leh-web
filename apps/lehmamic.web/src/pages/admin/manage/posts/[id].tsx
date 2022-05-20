@@ -42,7 +42,6 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
     mutateUpdateBlogPost.mutate({ id, blogPost }, {
       onSuccess: (result) => {
         // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
-        router.push(`/admin/manage/posts/${result._id}`, undefined, { shallow: true });
         // setBlogPostId(result.id);
       },
       onError: () => {

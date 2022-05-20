@@ -21,8 +21,8 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts }) => {
                defaultColumns={2}
                defaultSpacing={3}
                defaultHeight={450}>
-        {posts.map((post) => (
-          <BlogPostCard key={post._id} blogPost={post} />
+        {posts.map((post, index) => (
+          <BlogPostCard key={index} blogPost={post} />
         ))}
       </Masonry>
     </Layout>

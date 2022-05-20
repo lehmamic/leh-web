@@ -54,9 +54,9 @@ const ManageBlogPostsPage: NextPage<ManageBlogPostsPageProps> = ({ layoutProps }
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((p) => (
+            {data?.map((p, index) => (
               <TableRow
-                key={p._id}
+                key={index}
                 onClick={() => navigateToEditBlogPost(p)}
                 sx={(theme) => ({
                   '&:last-child td, &:last-child th': { border: 0 },
