@@ -2,10 +2,11 @@ import { publishBlogPostById } from './../../../../services/blog-post.service';
 import HttpStatus from 'http-status-codes';
 
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
 const handler = nextConnectRequestHandler();
 
-handler.post(async (req, res) => {
+handler.post(withApiAuthRequired(async (req, res) => {
   const { id } = req.query;
 
   const result = await publishBlogPostById(id as string);
@@ -15,6 +16,6 @@ handler.post(async (req, res) => {
   }
 
   res.status(HttpStatus.OK).json(result);
-})
+}));
 
 export default handler;

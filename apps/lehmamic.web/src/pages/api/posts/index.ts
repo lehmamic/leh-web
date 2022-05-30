@@ -3,10 +3,11 @@ import HttpStatus from 'http-status-codes';
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
 import { BlogPostFilter, createBlogPost, getBlogPosts } from '@services/blog-post.service';
 import { BlogPostType, BlogPostStatus, CreateOrUpdateBlogPostRequest } from '@models/blog-post';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
 const handler = nextConnectRequestHandler();
 
-handler.get(async (req, res) => {
+handler.get(withApiAuthRequired(async (req, res) => {
   const { type, status } = req.query;
 
   const filter: BlogPostFilter = {};
@@ -21,7 +22,7 @@ handler.get(async (req, res) => {
   const posts = await getBlogPosts(filter);
 
   res.status(HttpStatus.OK).json(posts);
-});
+}));
 
 // const validate = withValidation({
 //   schema: BlogPostValidator,
@@ -30,12 +31,12 @@ handler.get(async (req, res) => {
 // });
 
 // handler.post(validate(), async (req, res) => {
-handler.post(async (req, res) => {
+handler.post(withApiAuthRequired(async (req, res) => {
   const createRequest = req.body as CreateOrUpdateBlogPostRequest;
 
   const createdPost = await createBlogPost(createRequest);
 
   res.status(HttpStatus.CREATED).json(createdPost);
-});
+}));
 
 export default handler;

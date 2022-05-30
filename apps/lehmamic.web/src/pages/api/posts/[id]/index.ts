@@ -5,10 +5,11 @@ import { BlogPostValidator } from '@models/blog-post.validator';
 import { deleteBlogPost, getBlogPostById, updateBlogPost } from '@services/blog-post.service';
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
 import { CreateOrUpdateBlogPostRequest } from '@models/blog-post';
+import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
 const handler = nextConnectRequestHandler();
 
-handler.get(async (req, res) => {
+handler.get(withApiAuthRequired(async (req, res) => {
   const { id } = req.query;
   const post = await getBlogPostById(id as string);
 
@@ -18,7 +19,7 @@ handler.get(async (req, res) => {
   }
 
   res.status(HttpStatus.OK).json(post);
-});
+}));
 
 // const validate = withValidation({
 //   schema: BlogPostValidator,
@@ -27,7 +28,7 @@ handler.get(async (req, res) => {
 // });
 
 // handler.put(validate(), async (req, res) => {
-handler.put(async (req, res) => {
+handler.put(withApiAuthRequired(async (req, res) => {
   const { id } = req.query;
   const updateRequest = req.body as CreateOrUpdateBlogPostRequest;
 
@@ -38,13 +39,13 @@ handler.put(async (req, res) => {
   }
 
   res.status(HttpStatus.NO_CONTENT).end();
-});
+}));
 
-handler.delete(async (req, res) => {
+handler.delete(withApiAuthRequired(async (req, res) => {
   const { id } = req.query;
   await deleteBlogPost(id as string);
 
   res.status(HttpStatus.NO_CONTENT).end();
-});
+}));
 
 export default handler;
