@@ -1,21 +1,19 @@
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { LayoutProps } from "@components/Layout";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
-import { createBlogPostByIdQueryKey, useBlogPostById } from "@hooks/useBlogPostById";
+import { useBlogPostById } from "@hooks/useBlogPostById";
 import { useDeleteBlogPost } from "@hooks/useDeleteBlogPost";
 import { usePublishBlogPost } from "@hooks/usePublishBlogPost";
 import { useTags } from "@hooks/useTags";
 import { useUnpublishBlogPost } from "@hooks/useUnpublishBlogPost";
 import { useUpdateBlogPost } from "@hooks/useUpdateBlogPost";
 import { useUsers } from "@hooks/useUsers";
-import { BlogPostType, CreateOrUpdateBlogPostRequest } from "@models/blog-post";
-import { getBlogPostById } from "@services/blog-post.service";
+import { CreateOrUpdateBlogPostRequest } from "@models/blog-post";
 import { getSettings } from "@services/settings.service";
 import { ensureSerializable } from "@utils/serialization";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
-import { QueryClient } from "react-query";
 
 interface EditBlogPostsPageProps {
   id: string;
