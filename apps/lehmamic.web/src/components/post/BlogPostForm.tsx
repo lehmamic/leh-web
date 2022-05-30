@@ -11,6 +11,8 @@ export interface BlogPostFormProps {
   post?: BlogPost;
   onSave?: (data: FormData) => void;
   onDelete?: () => void;
+  onPublish?: () => void;
+  onUnpublish?: () => void;
   onBack?: () => void;
   sx?: SxProps<Theme>;
 }
@@ -23,7 +25,7 @@ export interface FormData {
   tags: string[];
 }
 
-export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onDelete, onBack, sx = [] }: BlogPostFormProps) => {
+export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onDelete, onPublish, onUnpublish, onBack, sx = [] }: BlogPostFormProps) => {
 
   const simpleMDEOptions = useMemo<EasyMDE.Options>(() => ({
     hideIcons: ['preview', 'side-by-side', 'fullscreen', 'guide'],
@@ -75,6 +77,18 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
     }
   }
 
+  const publishBlogPost = () => {
+    if(onPublish) {
+      onPublish();
+    }
+  };
+
+  const unpublishBlogPost = () => {
+    if(onUnpublish) {
+      onUnpublish();
+    }
+  };
+
   return (
     <Box sx={() => [
       { display: 'flex', flexDirection: 'column', width: '100%', height: '100%' },
@@ -88,8 +102,8 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
         {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
       </Typography>
       <Box sx={{ flex: '1 0 auto' }} />
-      {post && post.status === BlogPostStatus.Draft && (<Button sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
-      {post && post.status === BlogPostStatus.Published && (<Button sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
+      {post && post.status === BlogPostStatus.Draft && (<Button onClick={publishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
+      {post && post.status === BlogPostStatus.Published && (<Button onClick={unpublishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
       <Button
         variant="contained"
         color="primary"

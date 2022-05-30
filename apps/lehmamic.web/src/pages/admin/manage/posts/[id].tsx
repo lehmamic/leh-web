@@ -1,9 +1,11 @@
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { LayoutProps } from "@components/Layout";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
-import { useBlogPostById } from "@hooks/useBlogPostById";
+import { createBlogPostByIdQueryKey, useBlogPostById } from "@hooks/useBlogPostById";
 import { useDeleteBlogPost } from "@hooks/useDeleteBlogPost";
+import { usePublishBlogPost } from "@hooks/usePublishBlogPost";
 import { useTags } from "@hooks/useTags";
+import { useUnpublishBlogPost } from "@hooks/useUnpublishBlogPost";
 import { useUpdateBlogPost } from "@hooks/useUpdateBlogPost";
 import { useUsers } from "@hooks/useUsers";
 import { BlogPostType, CreateOrUpdateBlogPostRequest } from "@models/blog-post";
@@ -13,6 +15,7 @@ import { ensureSerializable } from "@utils/serialization";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { useRouter } from "next/router";
 import { ParsedUrlQuery } from "querystring";
+import { QueryClient } from "react-query";
 
 interface EditBlogPostsPageProps {
   id: string;
@@ -29,10 +32,11 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
 
   const { data: tags } = useTags();
   const { data: users } = useUsers();
-  const { data: post } = useBlogPostById(id);
+  const { data: post, refetch } = useBlogPostById(id);
   const mutateUpdateBlogPost = useUpdateBlogPost();
   const mutateDeleteBlogPost = useDeleteBlogPost();
-
+  const mutatePublishBlogPost = usePublishBlogPost();
+  const mutateUnpublishBlogPost = useUnpublishBlogPost();
 
   const updateBlogPost = (formValues: FormData): void => {
     const author = users?.find(u => u.userId === user?.sub);
@@ -58,7 +62,30 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
       onSuccess: (result) => {
         // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
         router.push(`/admin/manage/posts`, undefined, { shallow: true });
-        // setBlogPostId(result.id);
+      },
+      onError: () => {
+        // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
+      },
+    });
+  }
+
+  const publishBlogPost = ():void => {
+    mutatePublishBlogPost.mutate({ id }, {
+      onSuccess: (result) => {
+        // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
+        refetch();
+      },
+      onError: () => {
+        // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
+      },
+    });
+  }
+
+  const unpublishBlogPost = ():void => {
+    mutateUnpublishBlogPost.mutate({ id }, {
+      onSuccess: (result) => {
+        // setSnackbar({ open: true, text: 'The blog post has been saved.', severity: 'success' });
+        refetch();
       },
       onError: () => {
         // setSnackbar({ open: true, text: 'The blog post has not been saved due an error.', severity: 'error' });
@@ -71,7 +98,15 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
   };
 
   return (
-    <BlogPostForm tags={tags} post={post} onSave={updateBlogPost} onDelete={deleteBlogPost} onBack={navigateBack} />
+    <BlogPostForm
+      tags={tags}
+      post={post}
+      onSave={updateBlogPost}
+      onDelete={deleteBlogPost}
+      onPublish={publishBlogPost}
+      onUnpublish={unpublishBlogPost}
+      onBack={navigateBack}
+    />
   );
 };
 

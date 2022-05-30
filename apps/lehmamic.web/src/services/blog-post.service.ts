@@ -75,6 +75,38 @@ export const deleteBlogPost = async (id: string): Promise<void> => {
   await db.collection<BlogPost>(BLOGPOSTS_COLLECTION).deleteOne({ _id: new ObjectId(id) });
 }
 
+export const publishBlogPostById = async (id: string | undefined): Promise<BlogPost | null> => {
+  const { db } = await connectToMongoDb();
+  const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+    .findOne({ _id: new ObjectId(id) });
+
+  if (post) {
+    post.status = BlogPostStatus.Published;
+    post.publishedAt = dayjs.utc().toDate();
+
+    await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+      .replaceOne({ _id: new ObjectId(id) }, post);
+  }
+
+  return post;
+}
+
+export const unpublishBlogPostById = async (id: string | undefined): Promise<BlogPost | null> => {
+  const { db } = await connectToMongoDb();
+  const post = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+    .findOne({ _id: new ObjectId(id) });
+
+  if (post) {
+    post.status = BlogPostStatus.Draft;
+    post.publishedAt = undefined;
+
+    await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+      .replaceOne({ _id: new ObjectId(id) }, post);
+  }
+
+  return post;
+}
+
 export const getAllTags = async (): Promise<string[]> => {
   const { db } = await connectToMongoDb();
 
