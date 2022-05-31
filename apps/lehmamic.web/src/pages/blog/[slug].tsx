@@ -13,6 +13,7 @@ import { User } from '@models/user';
 import { getUsersById } from '@services/user.service';
 import { PostMetadata } from '@components/post/PostMetadata';
 import { PostTags } from '@components/post/PostTags';
+import { DisqusComments } from '@components/post/DisqusComments';
 
 interface BlogPostPageProps {
   layoutProps: LayoutProps;
@@ -44,6 +45,7 @@ const BlogPostPage: NextPage<BlogPostPageProps> = ({ layoutProps, post, authors 
                   sx={(theme) => ({ pre: { backgroundColor: '#1E1E1E', borderRadius: '0.5em', p: theme.spacing(3) }})}>
         {content}
       </Typography>
+      {layoutProps.disqus.shortName && <DisqusComments disqusShortname={layoutProps.disqus.shortName} baseUrl={layoutProps.baseUrl} post={post} />}
     </Layout>
   );
 };

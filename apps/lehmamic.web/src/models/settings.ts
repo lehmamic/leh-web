@@ -10,7 +10,10 @@ export interface Settings {
     facebook?: string;
     linkedIn?: string;
     github?: string;
-  }
+  };
+  disqus: {
+    shortName?: string;
+  };
 }
 
 export const defaultSettings: Settings = {
@@ -19,4 +22,5 @@ export const defaultSettings: Settings = {
   coverImageUrl: '',
   baseUrl: 'https://blog.lehmamic.ch/',
   socialMedia: {},
+  disqus: {},
 };

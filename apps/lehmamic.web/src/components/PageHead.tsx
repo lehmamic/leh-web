@@ -15,6 +15,9 @@ export interface PageHeaderProps {
     linkedIn?: string;
     github?: string;
   };
+  disqus: {
+    shortName?: string;
+  };
  }
 
  export const PageHead: React.FC<PageHeaderProps> = ({ title, contentTitle, description, baseUrl, path, prev, next, imageUrl, socialMedia }) => {
