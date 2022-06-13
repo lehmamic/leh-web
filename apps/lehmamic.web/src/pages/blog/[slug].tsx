@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { getBlogPostBySlug } from '@services/blog-post.service';
 import { getSettings } from '@services/settings.service';
 import { ensureSerializable } from '@utils/serialization';
-import { BlogPost, BlogPostType } from '@models/blog-post';
+import { BlogPost, BlogPostStatus, BlogPostType } from '@models/blog-post';
 import { ParsedUrlQuery } from 'querystring';
 import { extractBlogPostDescription, markdownToReact } from '@utils/transform-content';
 import { Layout, LayoutProps } from '@components/Layout';
@@ -63,12 +63,14 @@ export const getServerSideProps: GetServerSideProps<BlogPostPageProps, BlogPostU
   const authors = await getUsersById(post.authors.map(a => a.toString()));
 
   const settings = await getSettings();
+
   const layoutProps: LayoutProps = {
     ...settings,
     contentTitle: post.title,
     description: extractBlogPostDescription(post),
-    imageUrl: post.imageUrl ?? settings.coverImageUrl,
+    imageUrl: post.imageUrl && post.imageUrl !== '' ? post.imageUrl : settings.coverImageUrl,
     path: `blog/${post.slug}`,
+    preview: post.status !== BlogPostStatus.Published,
    };
 
   return {

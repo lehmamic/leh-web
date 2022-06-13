@@ -1,8 +1,8 @@
 import { Form } from "@components/Form";
 import { SimpleMDE } from "@components/SimpleMDE";
 import { BlogPost, BlogPostStatus, getStatusDisplayName } from "@models/blog-post";
-import { Autocomplete, Box, Button, Chip, Container, FormHelperText, SxProps, TextField, Theme, Typography } from "@mui/material";
-import { ChevronLeft, TrashCanOutline } from "mdi-material-ui";
+import { Autocomplete, Box, Button, Chip, Container, FormHelperText, Link, SxProps, TextField, Theme, Typography } from "@mui/material";
+import { ChevronLeft, OpenInNew, TrashCanOutline } from "mdi-material-ui";
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -61,7 +61,11 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
   const saveBlogPost = () => {
     if (onSave) {
       const formValues = getValues();
-      onSave(formValues);
+      const values: FormData = {
+        ...formValues,
+        imageUrl: formValues.imageUrl !== '' ? formValues.imageUrl : undefined,
+      }
+      onSave(values);
     }
   };
 
@@ -170,6 +174,20 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
         </Container>
 
         <Box sx={(theme) => ({ width: '300px', flex: '0 0 auto', pr: theme.spacing(2) })}>
+          {post && (
+            <Button
+              variant="outlined"
+              color="info"
+              LinkComponent={Link}
+              target="_blank"
+              href={`/blog/${post?.slug}`}
+              sx={(theme) => ({mb: theme.spacing(3), width: '100%'})}
+            >
+              <OpenInNew /> Preview
+            </Button>
+          )}
+
+
           {/* slug */}
           <Controller
             name="slug"

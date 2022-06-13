@@ -9,6 +9,7 @@ export interface PageHeaderProps {
   next?: string;
   prev?: string;
   imageUrl?: string;
+  preview?: boolean;
   socialMedia: {
     twitter?: string;
     facebook?: string;
