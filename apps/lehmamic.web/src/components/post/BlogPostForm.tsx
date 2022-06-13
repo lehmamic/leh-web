@@ -3,7 +3,7 @@ import { SimpleMDE } from "@components/SimpleMDE";
 import { BlogPost, BlogPostStatus, getStatusDisplayName } from "@models/blog-post";
 import { Autocomplete, Box, Button, Chip, Container, FormHelperText, InputAdornment, Link, SxProps, TextField, Theme, Tooltip, Typography } from "@mui/material";
 import { ChevronLeft, OpenInNew, TrashCanOutline, Link as LinkIcon } from "mdi-material-ui";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export interface BlogPostFormProps {
@@ -59,7 +59,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
   // required to set the real default value after the loading request returns
   useEffect(() => reset(createDefaultValues(post)), [reset, post]);
 
-  const saveBlogPost = () => {
+  const saveBlogPost = useCallback(() => {
     if (onSave) {
       const formValues = getValues();
       const values: FormData = {
@@ -68,7 +68,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
       }
       onSave(values);
     }
-  };
+  },[getValues, onSave]);
 
   const deleteBlogPost = () => {
     if (onDelete) {
@@ -93,6 +93,27 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
       onUnpublish();
     }
   };
+
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const nav = navigator as any;
+    if (e.key === 's' && (nav.userAgentData.platform.match("macOS") ? e.metaKey : e.ctrlKey)) {
+      e.preventDefault();
+      saveBlogPost();
+    }
+  }, [saveBlogPost]);
+
+  useEffect(() => {
+    // attach the event listener
+    document.addEventListener('keydown', handleKeyPress, false);
+
+    // remove the event listener
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
+
 
   return (
     <Box sx={() => [
