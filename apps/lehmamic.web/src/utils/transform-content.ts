@@ -1,5 +1,5 @@
 import { BlogPost } from '@models/blog-post';
-import { ReactElement } from './../../../../node_modules/rehype-react/lib/index.d';
+import { ReactElement } from 'rehype-react/lib/index.d';
 
 import { remark } from 'remark';
 import strip from 'strip-markdown';
@@ -10,7 +10,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import rehypePrism from 'rehype-prism-plus/all';
+import rehypePrism from 'rehype-prism-plus/common';
 import rehypeReact, { Options } from 'rehype-react';
 import { createElement, Fragment } from 'react';
 import { PostImage } from '@components/post/content/PostImage';
