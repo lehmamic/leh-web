@@ -1,14 +1,15 @@
 import { Form } from "@components/Form";
 import { SimpleMDE } from "@components/SimpleMDE";
 import { BlogPost, BlogPostStatus, getStatusDisplayName } from "@models/blog-post";
-import { Autocomplete, Box, Button, Chip, Container, FormHelperText, Link, SxProps, TextField, Theme, Typography } from "@mui/material";
-import { ChevronLeft, OpenInNew, TrashCanOutline } from "mdi-material-ui";
+import { Autocomplete, Box, Button, Chip, Container, FormHelperText, InputAdornment, Link, SxProps, TextField, Theme, Tooltip, Typography } from "@mui/material";
+import { ChevronLeft, OpenInNew, TrashCanOutline, Link as LinkIcon } from "mdi-material-ui";
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 export interface BlogPostFormProps {
   tags?: string[];
   post?: BlogPost;
+  baseUrl: string;
   onSave?: (data: FormData) => void;
   onDelete?: () => void;
   onPublish?: () => void;
@@ -25,7 +26,7 @@ export interface FormData {
   tags: string[];
 }
 
-export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, onDelete, onPublish, onUnpublish, onBack, sx = [] }: BlogPostFormProps) => {
+export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl, onSave, onDelete, onPublish, onUnpublish, onBack, sx = [] }: BlogPostFormProps) => {
 
   const simpleMDEOptions = useMemo<EasyMDE.Options>(() => ({
     hideIcons: ['preview', 'side-by-side', 'fullscreen', 'guide'],
@@ -151,7 +152,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
           <Controller
             name="content"
             control={control}
-            rules={{ required: 'Content is required' }}
+            rules={{ }}
             render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
               <>
                 <SimpleMDE
@@ -206,12 +207,32 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
                 value={value}
                 error={!!error}
                 helperText={error?.message}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LinkIcon />
+                    </InputAdornment>
+                  ),
+                }}
                 onChange={onChange}
                 onBlur={onBlur}
-                sx={(theme) => ({ width: '100%', pb: theme.spacing(3) })}
+                sx={(theme) => ({ width: '100%', pb: theme.spacing(1) })}
               />
             )}
           />
+          <Tooltip title={`${baseUrl}${getValues().slug}`}>
+            <Typography
+              variant='body2'
+              sx={(theme) => ({
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                pb: theme.spacing(3),
+              })}
+            >
+              {`${baseUrl}${getValues().slug}`}
+            </Typography>
+          </Tooltip>
 
           {/* image url */}
           <Controller
@@ -221,7 +242,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, onSave, 
             render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
               <TextField
                 id="imageUrl"
-                label="imageUrl"
+                label="Image Url"
                 value={value}
                 error={!!error}
                 helperText={error?.message}

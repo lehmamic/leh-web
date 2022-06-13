@@ -99,6 +99,7 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
     <BlogPostForm
       tags={tags}
       post={post}
+      baseUrl={layoutProps.baseUrl}
       onSave={updateBlogPost}
       onDelete={deleteBlogPost}
       onPublish={publishBlogPost}
@@ -111,13 +112,6 @@ const EditBlogPostsPage: NextPage<EditBlogPostsPageProps> = ({ id, layoutProps }
 export default withPageAuthRequired(EditBlogPostsPage);
 
 export const getServerSideProps: GetServerSideProps<EditBlogPostsPageProps, BlogPostUrlQuery> = async (context: GetServerSidePropsContext<BlogPostUrlQuery>): Promise<GetServerSidePropsResult<EditBlogPostsPageProps>> => {
-  // const post = await getBlogPostById(context.params?.id);
-  // if (!post || post.type !== BlogPostType.Post) {
-  //   return {
-  //     notFound: true,
-  //   };
-  // }
-
   const settings = await getSettings();
   const layoutProps: LayoutProps = {
     ...settings,
