@@ -10,7 +10,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
-import rehypePrism from 'rehype-prism-plus/common';
+import rehypePrism from 'rehype-prism-plus/all';
 import rehypeReact, { Options } from 'rehype-react';
 import { createElement, Fragment } from 'react';
 import { PostImage } from '@components/post/content/PostImage';
