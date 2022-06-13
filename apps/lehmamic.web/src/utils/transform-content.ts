@@ -1,5 +1,5 @@
 import { BlogPost } from '@models/blog-post';
-import { ReactElement } from './../../../../node_modules/rehype-react/lib/index.d';
+import { ReactElement } from 'rehype-react/lib/index.d';
 
 import { remark } from 'remark';
 import strip from 'strip-markdown';
