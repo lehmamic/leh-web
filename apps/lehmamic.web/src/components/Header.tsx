@@ -1,6 +1,9 @@
-import { Typography, AppBar, Toolbar, Container, IconButton, Menu, MenuItem, Button, Tooltip, Avatar, Divider, SxProps, Theme } from '@mui/material';
+import { useUser } from '@auth0/nextjs-auth0';
+import { Typography, AppBar, Toolbar, Container, IconButton, Menu, Divider, SxProps, Theme } from '@mui/material';
 import { Box } from '@mui/system';
-import { Facebook, Github, Linkedin, Menu as MenuIcon, Twitter } from 'mdi-material-ui';
+import { navItems } from '@utils/navItem';
+import { extractSocialMedia } from '@utils/socialMedia';
+import { Menu as MenuIcon } from 'mdi-material-ui';
 import * as React from 'react';
 
 import Link from './Link';
@@ -18,6 +21,9 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const { user } = useUser();
+
+  const socialMediaItems = extractSocialMedia(socialMedia);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -76,63 +82,34 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) =
               }}
             >
               <Box sx={{display: 'flex', flexDirection: 'column' }}>
-                <Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href="/blog"
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
-                >
-                  Blog
-                </Link>
-                <Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href="/about"
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
-                >
-                  About
-                </Link>
+                {navItems.filter(item => !item.isProtected || !!user).map((item, index) => (
+                  <Link
+                    key={index}
+                    variant="button"
+                    color="text.primary"
+                    underline="none"
+                    href={item.url}
+                    sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
 
-                {!(socialMedia?.facebook || socialMedia?.twitter || socialMedia?.linkedIn || socialMedia?.github) && (<Divider />)}
+                {(socialMediaItems.length > 0) && (<Divider />)}
 
-                {!!socialMedia?.facebook &&<Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href={`https://www.facebook.com/${socialMedia.facebook}`}
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-                >
-                  <Facebook />
-                </Link>}
-                {!!socialMedia?.twitter && <Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href={`https://twitter.com/${socialMedia.twitter.replace('@', '')}`}
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-                >
-                  <Twitter />
-                </Link>}
-                {!!socialMedia?.linkedIn && <Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href={`https://www.linkedin.com/in/${socialMedia.linkedIn}`}
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-                >
-                  <Linkedin />
-                </Link>}
-                {!!socialMedia?.github && <Link
-                  variant="button"
-                  color="text.primary"
-                  underline="none"
-                  href={`https://github.com/${socialMedia.github}`}
-                  sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-                >
-                  <Github />
-                </Link>}
+                {socialMediaItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    variant="button"
+                    color="text.primary"
+                    underline="none"
+                    title={item.name}
+                    href={item.url}
+                    sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
+                  >
+                    <item.icon />
+                  </Link>
+                ))}
               </Box>
             </Menu>
           </Box>
@@ -160,75 +137,35 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) =
             flex: '1 0 auto',
             ml: (theme) => theme.spacing(4),
           }}>
-            <Link
+            {navItems.filter(item => !item.isProtected || !!user).map((item, index) => (
+              <Link
+                key={index}
                 variant="button"
                 color="text.primary"
                 underline="none"
-                href="/blog"
+                href={item.url}
                 sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
-            >
-              Blog
-            </Link>
-            <Link
-              variant="button"
-              color="text.primary"
-              underline="none"
-              href="/about"
-              sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
-            >
-              About
-            </Link>
-                 {/* {user && (
-                   <Link
-                     variant="button"
-                     color="text.primary"
-                     underline="none"
-                     href="/admin/site"
-                     sx={{ display: 'inline-block', my: 1, mx: 1.5 }}
-                   >
-                     Admin
-                   </Link>
-                 )} */}
+              >
+                {item.label}
+              </Link>
+            ))}
           </Box>
 
           {/* social media icons */}
           <Box sx={{ display: { xs: 'none', md: 'flex' }, alignSelf: 'flex-end' }}>
-            {!!socialMedia?.facebook &&<Link
-              variant="button"
-              color="text.primary"
-              underline="none"
-              href={`https://www.facebook.com/${socialMedia.facebook}`}
-              sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-            >
-              <Facebook />
-            </Link>}
-            {!!socialMedia?.twitter && <Link
-              variant="button"
-              color="text.primary"
-              underline="none"
-              href={`https://twitter.com/${socialMedia.twitter.replace('@', '')}`}
-              sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-            >
-              <Twitter />
-            </Link>}
-            {!!socialMedia?.linkedIn && <Link
-              variant="button"
-              color="text.primary"
-              underline="none"
-              href={`https://www.linkedin.com/in/${socialMedia.linkedIn}`}
-              sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-            >
-              <Linkedin />
-            </Link>}
-            {!!socialMedia?.github && <Link
-              variant="button"
-              color="text.primary"
-              underline="none"
-              href={`https://github.com/${socialMedia.github}`}
-              sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
-            >
-              <Github />
-            </Link>}
+            {socialMediaItems.map((item, index) => (
+              <Link
+                key={index}
+                variant="button"
+                color="text.primary"
+                underline="none"
+                title={item.name}
+                href={item.url}
+                sx={{ display: 'inline-block', my: 1, mx: 1.5, pt: '8px' }}
+              >
+                <item.icon />
+              </Link>
+            ))}
           </Box>
 
           {/* <Box sx={{ flexGrow: 0 }}>

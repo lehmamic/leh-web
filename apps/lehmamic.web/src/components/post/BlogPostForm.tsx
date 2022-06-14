@@ -241,7 +241,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
               />
             )}
           />
-          <Tooltip title={`${baseUrl}${getValues().slug}`}>
+          <Tooltip title={`${baseUrl}blog/${getValues().slug}`}>
             <Typography
               variant='body2'
               sx={(theme) => ({
@@ -251,7 +251,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
                 pb: theme.spacing(3),
               })}
             >
-              {`${baseUrl}${getValues().slug}`}
+              {`${baseUrl}blog/${getValues().slug}`}
             </Typography>
           </Tooltip>
 
