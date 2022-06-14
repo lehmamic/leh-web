@@ -81,7 +81,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) =
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              <Box sx={{display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {navItems.filter(item => !item.isProtected || !!user).map((item, index) => (
                   <Link
                     key={index}
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) =
           </Box>
 
           {/* social media icons */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignSelf: 'flex-end' }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', }}>
             {socialMediaItems.map((item, index) => (
               <Link
                 key={index}
