@@ -1,4 +1,4 @@
-import { Facebook, Github, Linkedin, Twitter } from "mdi-material-ui";
+import { Facebook, Github, Linkedin, Rss, Twitter } from "mdi-material-ui";
 
 export interface SocialMedia {
   name: string;
@@ -12,8 +12,9 @@ interface NavItem {
 }
 
 export const extractSocialMedia = (
-  socialMedia: {twitter?: string; facebook?: string; linkedIn?: string; github?: string;
-}): SocialMedia[] => {
+  baseUrl: string,
+  socialMedia: { twitter?: string; facebook?: string; linkedIn?: string; github?: string; },
+): SocialMedia[] => {
   const result: SocialMedia[] = [];
 
   if (socialMedia.facebook) {
@@ -47,6 +48,12 @@ export const extractSocialMedia = (
       icon: Github,
     });
   }
+
+  result.push({
+    name: 'RSS',
+    url: `${baseUrl}blog/rss.xml`,
+    icon: Rss,
+  });
 
   return result;
 };

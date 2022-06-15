@@ -12,7 +12,7 @@ export const Layout: React.FC<PropsWithChildren<LayoutProps>> = (props) => {
   return (
     <main>
       <PageHead {...props} />
-      <Header title={props.title} socialMedia={props.socialMedia} />
+      <Header title={props.title} baseUrl={props.baseUrl} socialMedia={props.socialMedia} />
       <MaterialCover coverImage={props.imageUrl ?? ''} />
       {props.preview && <PreviewBanner text="PREVIEW" />}
       <Container maxWidth="md" component="article" sx={(theme) => ({ mt: theme.spacing(5) })}>

@@ -10,6 +10,7 @@ import Link from './Link';
 
 export interface HeaderProps {
  title: string;
+ baseUrl: string;
  socialMedia: {
    twitter?: string;
    facebook?: string;
@@ -19,11 +20,11 @@ export interface HeaderProps {
  sx?: SxProps<Theme>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, socialMedia, sx = [] }) => {
+export const Header: React.FC<HeaderProps> = ({ title, baseUrl, socialMedia, sx = [] }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const { user } = useUser();
 
-  const socialMediaItems = extractSocialMedia(socialMedia);
+  const socialMediaItems = extractSocialMedia(baseUrl, socialMedia);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
