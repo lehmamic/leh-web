@@ -2,6 +2,7 @@ import { BlogPostType, BlogPostStatus } from "@models/blog-post";
 import { getBlogPosts } from "@services/blog-post.service";
 import { getSettings } from "@services/settings.service";
 import { extractBlogPostDescription } from "@utils/transform-content";
+import { encodeXML } from "@utils/xml";
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 
@@ -31,26 +32,26 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     return `<?xml version="1.0" encoding="UTF-8"?>
      <rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:webfeeds="http://webfeeds.org/rss/1.0" version="2.0">
        <channel>
-         <title>${settings.title}</title>
-         <link>${settings.baseUrl}blog</link>
-         <description>${settings.description}</description>
+         <title>${encodeXML(settings.title)}</title>
+         <link>${encodeXML(settings.baseUrl)}blog</link>
+         <description>${encodeXML(settings.description)}</description>
          <language>en-us</language>
          <ttl>60</ttl>
          <lastBuildDate>${channelLastChanged}</lastBuildDate>
-         <atom:link href="${settings.baseUrl}blog/rss.xml" rel="self" type="application/rss+xml" />
-         <webfeeds:cover image="${settings.coverImageUrl}" />
-         <webfeeds:icon>${settings.baseUrl}favicon.ico</webfeeds:icon>
-         <webfeeds:logo>${settings.baseUrl}favicon.png</webfeeds:logo>
+         <atom:link href="${encodeXML(settings.baseUrl)}blog/rss.xml" rel="self" type="application/rss+xml" />
+         <webfeeds:cover image="${encodeXML(settings.coverImageUrl)}" />
+         <webfeeds:icon>${encodeXML(settings.baseUrl)}favicon.ico</webfeeds:icon>
+         <webfeeds:logo>${encodeXML(settings.baseUrl)}favicon.png</webfeeds:logo>
          <webfeeds:accentColor>000000</webfeeds:accentColor>
          ${posts
            .map(
              (post) => `
            <item>
-             <title>${cdata(`${post.title}`)}</title>
-             <description>${cdata(extractBlogPostDescription(post))}</description>
+             <title>${cdata(`${encodeXML(post.title)}`)}</title>
+             <description>${cdata(encodeXML(extractBlogPostDescription(post)))}</description>
              <pubDate>${dayjs(post.publishedAt).format(rssDateFormat)}</pubDate>
-             <link>${settings.baseUrl}blog/${post.slug}</link>
-             <guid>${settings.baseUrl}blog/${post.slug}</guid>
+             <link>${encodeXML(settings.baseUrl)}blog/${post.slug}</link>
+             <guid>${encodeXML(settings.baseUrl)}blog/${post.slug}</guid>
            </item>`
            )
            .join("")}
