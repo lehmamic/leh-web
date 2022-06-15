@@ -47,8 +47,8 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
            .map(
              (post) => `
            <item>
-             <title>${cdata(`${encodeXML(post.title)}`)}</title>
-             <description>${cdata(encodeXML(extractBlogPostDescription(post)))}</description>
+             <title>${cdata(`${post.title}`)}</title>
+             <description>${cdata(extractBlogPostDescription(post))}</description>
              <pubDate>${dayjs(post.publishedAt).format(rssDateFormat)}</pubDate>
              <link>${encodeXML(settings.baseUrl)}blog/${post.slug}</link>
              <guid>${encodeXML(settings.baseUrl)}blog/${post.slug}</guid>
