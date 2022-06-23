@@ -136,7 +136,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
         disabled={!isValid}
         onClick={saveBlogPost}
       >
-        Save
+        {post ? 'Save' : 'Create'}
       </Button>
     </Box>
 
