@@ -47,7 +47,11 @@ const CreateBlogPostsPage: NextPage<CreateBlogPostsPageProps> = ({ layoutProps }
   };
 
   return (
-    <BlogPostForm tags={tags} baseUrl={layoutProps.baseUrl} onSave={createBlogPost} onBack={navigateBack} />
+    <BlogPostForm tags={tags}
+                  baseUrl={layoutProps.baseUrl}
+                  isSaving={mutateCreateBlogPost.isLoading}
+                  onSave={createBlogPost}
+                  onBack={navigateBack} />
   );
 };
 

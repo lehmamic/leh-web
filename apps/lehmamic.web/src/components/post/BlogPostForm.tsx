@@ -10,6 +10,9 @@ export interface BlogPostFormProps {
   tags?: string[];
   post?: BlogPost;
   baseUrl: string;
+  isSaving?: boolean;
+  isDeleting?: boolean;
+  isPublishing?: boolean;
   onSave?: (data: FormData) => void;
   onDelete?: () => void;
   onPublish?: () => void;
@@ -26,13 +29,16 @@ export interface FormData {
   tags: string[];
 }
 
-export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl, onSave, onDelete, onPublish, onUnpublish, onBack, sx = [] }: BlogPostFormProps) => {
+export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl, isSaving, isDeleting, isPublishing, onSave, onDelete, onPublish, onUnpublish, onBack, sx = [] }: BlogPostFormProps) => {
 
   const simpleMDEOptions = useMemo<EasyMDE.Options>(() => ({
     hideIcons: ['preview', 'side-by-side', 'fullscreen', 'guide'],
     showIcons: ['code', 'table'],
     status: false,
   }), []);
+
+  const inProgress = useMemo<boolean>(() => !!isSaving || !!isDeleting || !!isPublishing,
+    [isDeleting, isPublishing, isSaving]);
 
   const createDefaultValues = (post?: BlogPost) : FormData => {
     return {
@@ -128,12 +134,12 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
         {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
       </Typography>
       <Box sx={{ flex: '1 0 auto' }} />
-      {post && post.status === BlogPostStatus.Draft && (<Button onClick={publishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
-      {post && post.status === BlogPostStatus.Published && (<Button onClick={unpublishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
+      {post && post.status === BlogPostStatus.Draft && (<Button disabled={inProgress} onClick={publishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
+      {post && post.status === BlogPostStatus.Published && (<Button disabled={inProgress} onClick={unpublishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
       <Button
         variant="contained"
         color="primary"
-        disabled={!isValid}
+        disabled={!isValid || inProgress}
         onClick={saveBlogPost}
       >
         {post ? 'Save' : 'Create'}
@@ -315,7 +321,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
             <Button
               color="error"
               variant="outlined"
-              // disabled={mutateDeleteBlogPost.isLoading}
+              disabled={inProgress}
               onClick={deleteBlogPost}
               sx={(theme) => ({ mt: theme.spacing(3), width: '100%' })}
             >
