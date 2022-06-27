@@ -130,9 +130,11 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
       <Button sx={{ display: 'inline-flex' }} onClick={navigateBack}>
         <ChevronLeft /> Posts
       </Button>
-      <Typography color="text.secondary" sx={(theme) => ({ ml: theme.spacing(2) })}>
-        {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
-      </Typography>
+      {!inProgress && (
+        <Typography color="text.secondary" sx={(theme) => ({ ml: theme.spacing(2) })}>
+          {getStatusDisplayName(post?.status ?? BlogPostStatus.Draft)}
+        </Typography>
+      )}
       <Box sx={{ flex: '1 0 auto' }} />
       {post && post.status === BlogPostStatus.Draft && (<Button disabled={inProgress} onClick={publishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Publish</Button>)}
       {post && post.status === BlogPostStatus.Published && (<Button disabled={inProgress} onClick={unpublishBlogPost} sx={(theme) => ({ mr: theme.spacing(2) })}>Unpublish</Button>)}
