@@ -54,7 +54,12 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
               {dayjs(blogPost.publishedAt).format("D MMMM YYYY")}
             </Typography>
             {blogPost.tags.map(tag => (
-                <Chip key={tag} label={tag} size="small" />
+                <Chip key={tag} label={tag} sx={(theme) => ({
+                  height: '20px',
+                  '& .MuiChip-label': {
+                    fontSize: '0.7rem',
+                    px: '6px',
+                  }})} size="small" />
               ))}
           </Box>
         </CardActions>

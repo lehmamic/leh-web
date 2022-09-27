@@ -39,7 +39,7 @@ export default function MyApp(props: MyAppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <PlausibleProvider domain="lehmamic.ch">
+        <PlausibleProvider domain="lehmamic.ch" enabled={true}>
           <UserProvider>
             <CacheProvider value={emotionCache}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
