@@ -48,11 +48,27 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
             {content}
           </Typography>
         </CardContent>
-        <CardActions sx={(theme) => ({ p: theme.spacing(2), borderTopWidth: 1, borderTopColor: theme.palette.divider, borderTopStyle: 'solid'})}>
-          <Box sx={(theme) => ({ display: 'flex', alignItems: 'center', gap: theme.spacing(1), flexWrap: 'wrap' })}>
+        <CardActions sx={(theme) => ({
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: theme.spacing(1),
+          p: theme.spacing(2),
+          borderTopWidth: 1,
+          borderTopColor: theme.palette.divider,
+          borderTopStyle: 'solid',
+          '& :not(:first-of-type)': {
+            ml: '0px'
+          }
+
+        })}>
+          <Box sx={(theme) => ({ display: 'flex', })}>
             <Typography variant="body2" component="span" noWrap sx={(theme) => ({ color: theme.palette.grey[700] })}>
               {dayjs(blogPost.publishedAt).format("D MMMM YYYY")}
             </Typography>
+
+          </Box>
+          <Box sx={(theme) => ({ display: 'flex', gap: theme.spacing(1), flexWrap: 'wrap' })}>
             {blogPost.tags.map(tag => (
                 <Chip key={tag} label={tag} sx={(theme) => ({
                   height: '20px',
