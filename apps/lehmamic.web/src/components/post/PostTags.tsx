@@ -19,7 +19,7 @@ export const PostTags: React.FC<PostTagsProps> = ({ post, sx = [] }) => {
             height: '18px',
             '& .MuiChip-label': {
               fontSize: '0.7rem',
-              pt: '2px',
+              pt: '1px',
               px: '8px',
             }})} />
         ))}
