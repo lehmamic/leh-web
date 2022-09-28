@@ -15,6 +15,7 @@ import rehypeReact, { Options } from 'rehype-react';
 import { createElement, Fragment } from 'react';
 import { PostImage } from '@components/post/content/PostImage';
 import { PostLink } from '@components/post/content/PostLink';
+import readingTime, { ReadTimeResults } from 'reading-time';
 
 export const removeMarkdown = (value: string): string =>{
   return String(remark()
@@ -68,4 +69,8 @@ export const clampContent = (value: string, maxLength: number): string => {
 export const extractBlogPostDescription = (post: BlogPost): string => {
   const description = post.description && post.description != '' ? post.description : removeMarkdown(post.content);
   return clampContent(description, 265);
+}
+
+export const extractReadingTime = (post: BlogPost): ReadTimeResults => {
+  return readingTime(post.content);
 }

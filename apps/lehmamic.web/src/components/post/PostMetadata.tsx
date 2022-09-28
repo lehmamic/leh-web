@@ -4,6 +4,7 @@ import { Avatar, Box, SxProps, Theme, Typography } from "@mui/material";
 import md5 from "md5";
 import { useMemo } from "react";
 import dayjs from 'dayjs';
+import { extractReadingTime } from "@utils/transform-content";
 
 export interface PostAuthorInfoProps {
   user: User;
@@ -14,6 +15,7 @@ export interface PostAuthorInfoProps {
 export const PostMetadata: React.FC<PostAuthorInfoProps> = ({ user, post, sx = [] }) => {
   const fullName = `${user.firstName} ${user.lastName}`;
   const gravatarUrl = useMemo(() => `https://www.gravatar.com/avatar/${md5(user.email)}`, [user.email]);
+  const readingTime = useMemo(() => extractReadingTime(post), [post]);
 
   return (
     <Box sx={[
@@ -27,7 +29,7 @@ export const PostMetadata: React.FC<PostAuthorInfoProps> = ({ user, post, sx = [
           {fullName}
         </Typography>
         <Typography variant="subtitle1" component="span" sx={(theme) => ({ lineHeight: 1.4, fontWeight: 400, color: theme.palette.grey[500] })}>
-          {dayjs(post.publishedAt).format("D MMMM YYYY")}
+          {dayjs(post.publishedAt).format("D MMMM YYYY")} &#8226; {readingTime.text}
         </Typography>
       </Box>
 

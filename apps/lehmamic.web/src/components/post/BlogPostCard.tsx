@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { BlogPost } from '@models/blog-post';
 
 import Link from '../Link';
-import { extractBlogPostDescription } from '@utils/transform-content';
+import { extractBlogPostDescription, extractReadingTime } from '@utils/transform-content';
 
 export interface BlogPostCardProps {
   blogPost: BlogPost;
@@ -14,6 +14,7 @@ export interface BlogPostCardProps {
 
 export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }: BlogPostCardProps) => {
   const content = React.useMemo(() => extractBlogPostDescription(blogPost), [blogPost]);
+  const readingTime = React.useMemo(() => extractReadingTime(blogPost), [blogPost]);
 
   return (
     <Link underline="none" href={`/blog/${blogPost.slug}`} sx={
@@ -64,7 +65,7 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
         })}>
           <Box sx={(theme) => ({ display: 'flex', })}>
             <Typography variant="body2" component="span" noWrap sx={(theme) => ({ color: theme.palette.grey[700] })}>
-              {dayjs(blogPost.publishedAt).format("D MMMM YYYY")}
+              {dayjs(blogPost.publishedAt).format("D MMMM YYYY")} &#8226; {readingTime.text}
             </Typography>
 
           </Box>
