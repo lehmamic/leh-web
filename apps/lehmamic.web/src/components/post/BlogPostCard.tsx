@@ -6,6 +6,7 @@ import { BlogPost } from '@models/blog-post';
 
 import Link from '../Link';
 import { extractBlogPostDescription, extractReadingTime } from '@utils/transform-content';
+import { PostTags } from './PostTags';
 
 export interface BlogPostCardProps {
   blogPost: BlogPost;
@@ -67,18 +68,8 @@ export const BlogPostCard: React.FC<BlogPostCardProps> = ({ sx = [], blogPost }:
             <Typography variant="body2" component="span" noWrap sx={(theme) => ({ color: theme.palette.grey[700] })}>
               {dayjs(blogPost.publishedAt).format("D MMMM YYYY")} &#8226; {readingTime.text}
             </Typography>
-
           </Box>
-          <Box sx={(theme) => ({ display: 'flex', gap: theme.spacing(1), flexWrap: 'wrap' })}>
-            {blogPost.tags.map(tag => (
-                <Chip key={tag} label={tag} sx={(theme) => ({
-                  height: '20px',
-                  '& .MuiChip-label': {
-                    fontSize: '0.7rem',
-                    px: '6px',
-                  }})} size="small" />
-              ))}
-          </Box>
+          <PostTags post={blogPost} />
         </CardActions>
       </Card>
     </Link>
