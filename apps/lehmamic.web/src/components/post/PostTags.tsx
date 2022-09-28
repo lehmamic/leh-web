@@ -16,10 +16,11 @@ export const PostTags: React.FC<PostTagsProps> = ({ post, sx = [] }) => {
     ] as any}>
       {post.tags.map(tag => (
           <Chip key={tag} label={tag} size="small"  sx={(theme) => ({
-            height: '20px',
+            height: '18px',
             '& .MuiChip-label': {
               fontSize: '0.7rem',
-              px: '6px',
+              pt: '2px',
+              px: '8px',
             }})} />
         ))}
     </Box>
