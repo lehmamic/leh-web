@@ -8,19 +8,23 @@ import { Layout, LayoutProps } from "@components/Layout";
 import { Masonry } from "@mui/lab";
 import { ParsedUrlQuery } from "querystring";
 import { PaginationResult } from "@models/pagination-result";
+import { Pagination } from "@components/Pagination";
+import { Box } from "@mui/material";
 
-const pageSize = 2;
+const DEFAULT_PAGE_SIZE = 2;
 
 interface BlogPageProps {
   layoutProps: LayoutProps;
   posts: PaginationResult<BlogPost>;
+  page: number;
+  pageSize: number;
 }
 
 interface BlogPageUrlQuery extends ParsedUrlQuery {
   page?: string;
 }
 
-const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts }) => {
+const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts, page, pageSize }) => {
 
   return (
     <Layout {...layoutProps}>
@@ -33,6 +37,10 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts }) => {
           <BlogPostCard key={index} blogPost={post} />
         ))}
       </Masonry>
+      <Box sx={(theme) => ({ display: 'flex', flexDirection: 'row', justifyContent: 'center', my: theme.spacing(4) })}>
+        <Pagination current={page} total={posts.total / pageSize} />
+      </Box>
+
     </Layout>
   );
 };
@@ -47,21 +55,23 @@ export const getServerSideProps: GetServerSideProps<BlogPageProps, BlogPageUrlQu
     path: 'blog',
    };
 
-   let page = parseInt(context.query.page as string ?? '0');
-   if (isNaN(page)) {
-    page = 0;
+   let page = parseInt(context.query.page as string ?? '1');
+   if (isNaN(page) || page < 1) {
+    page = 1;
    }
 
    const posts = await getBlogPostsPaged(
     { type: BlogPostType.Post, status: BlogPostStatus.Published },
     { publishedAt: -1 },
-    page * pageSize,
-    pageSize);
+    (page - 1) * DEFAULT_PAGE_SIZE,
+    DEFAULT_PAGE_SIZE);
 
   return {
     props: {
       layoutProps: ensureSerializable(layoutProps),
       posts: ensureSerializable(posts),
+      page,
+      pageSize: DEFAULT_PAGE_SIZE,
     }
   }
 }
