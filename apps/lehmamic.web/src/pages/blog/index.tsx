@@ -16,7 +16,8 @@ const DEFAULT_PAGE_SIZE = 2;
 interface BlogPageProps {
   layoutProps: LayoutProps;
   posts: PaginationResult<BlogPost>;
-  page: number;
+  currentPage: number;
+  totalPages: number;
   pageSize: number;
 }
 
@@ -24,7 +25,7 @@ interface BlogPageUrlQuery extends ParsedUrlQuery {
   page?: string;
 }
 
-const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts, page, pageSize }) => {
+const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts, currentPage: currentPage, totalPages }) => {
 
   return (
     <Layout {...layoutProps}>
@@ -38,7 +39,7 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts, page, pageSize
         ))}
       </Masonry>
       <Box sx={(theme) => ({ display: 'flex', flexDirection: 'row', justifyContent: 'center', my: theme.spacing(4) })}>
-        <Pagination current={page} total={posts.total / pageSize} />
+        <Pagination current={currentPage} total={totalPages} />
       </Box>
 
     </Layout>
@@ -70,7 +71,8 @@ export const getServerSideProps: GetServerSideProps<BlogPageProps, BlogPageUrlQu
     props: {
       layoutProps: ensureSerializable(layoutProps),
       posts: ensureSerializable(posts),
-      page,
+      currentPage: page,
+      totalPages: posts.total / DEFAULT_PAGE_SIZE,
       pageSize: DEFAULT_PAGE_SIZE,
     }
   }
