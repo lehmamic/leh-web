@@ -1,10 +1,8 @@
 import { getBlogPostsPaged } from '@services/blog-post.service';
 import { BlogPost, BlogPostType, BlogPostStatus } from '@models/blog-post';
 import { getSettings } from '@services/settings.service';
-import { getBlogPosts } from '@services/blog-post.service';
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
-import { resourceLimits } from 'worker_threads';
 import { DEFAULT_PAGE_SIZE } from './blog';
 
 const SiteMap = () => {
@@ -31,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
     const pagedPosts = await getBlogPostsPaged({ type: BlogPostType.Post, status: BlogPostStatus.Published }, { publishedAt: -1 }, 0, 10000);
     const pagedPages = await getBlogPostsPaged({ type: BlogPostType.Page, status: BlogPostStatus.Published }, { publishedAt: -1 }, 0, 10000);
 
-    const totalPages = pagedPosts.total / DEFAULT_PAGE_SIZE;
+    const totalPages = Math.ceil(pagedPosts.total / DEFAULT_PAGE_SIZE);
     const pages = [...Array(totalPages).keys()].map(i => i + 1);
 
     const lastTimeModified = await getHomePageLastModified(pagedPages.data.concat(pagedPosts.data));
