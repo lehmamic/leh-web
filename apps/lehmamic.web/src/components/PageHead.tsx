@@ -29,7 +29,7 @@ export interface PageHeaderProps {
       <meta name="description" content={description} />
       <meta name="viewport" content="initial-scale=1, width=device-width" />
 
-      <link rel="canonical" href={baseUrl} />
+      <link rel="canonical" href={`${baseUrl}${path}`} />
       <meta name="referrer" content="no-referrer-when-downgrade" />
       {!!prev && (
         <link rel="prev" href={`${baseUrl}${prev}`} />
