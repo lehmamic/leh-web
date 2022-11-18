@@ -11,7 +11,7 @@ import { PaginationResult } from "@models/pagination-result";
 import { Pagination } from "@components/Pagination";
 import { Box } from "@mui/material";
 
-const DEFAULT_PAGE_SIZE = 2;
+export const DEFAULT_PAGE_SIZE = 2;
 
 interface BlogPageProps {
   layoutProps: LayoutProps;

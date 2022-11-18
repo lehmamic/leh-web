@@ -1,8 +1,11 @@
+import { getBlogPostsPaged } from '@services/blog-post.service';
 import { BlogPost, BlogPostType, BlogPostStatus } from '@models/blog-post';
 import { getSettings } from '@services/settings.service';
 import { getBlogPosts } from '@services/blog-post.service';
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
+import { resourceLimits } from 'worker_threads';
+import { DEFAULT_PAGE_SIZE } from './blog';
 
 const SiteMap = () => {
   // getServerSideProps will do the heavy lifting
@@ -24,25 +27,51 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 
   async function generateSiteMap() {
     const settings = await getSettings();
-    const posts = await getBlogPosts({ status: BlogPostStatus.Published });
+
+    const pagedPosts = await getBlogPostsPaged({ type: BlogPostType.Post, status: BlogPostStatus.Published }, { publishedAt: -1 }, 0, 10000);
+    const pagedPages = await getBlogPostsPaged({ type: BlogPostType.Page, status: BlogPostStatus.Published }, { publishedAt: -1 }, 0, 10000);
+
+    const totalPages = pagedPosts.total / DEFAULT_PAGE_SIZE;
+    const pages = [...Array(totalPages).keys()].map(i => i + 1);
+
+    const lastTimeModified = await getHomePageLastModified(pagedPages.data.concat(pagedPosts.data));
 
     return `<?xml version="1.0" encoding="UTF-8"?>
      <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
        <url>
          <loc>${settings.baseUrl}blog</loc>
-         <lastmod>${await getHomePageLastModified(posts)}</lastmod>
+         <lastmod>${lastTimeModified}</lastmod>
        </url>
-       ${posts
-         .map(({ type, slug, modifiedAt: modifedAt }) => {
-           const baseUrl = type === BlogPostType.Post ? `${settings.baseUrl}blog`: settings.baseUrl;
+       ${pages
+        .map((page) => {
+          return `
+        <url>
+            <loc>${settings.baseUrl}blog?page=${page}</loc>
+            <lastmod>${lastTimeModified}</lastmod>
+        </url>
+      `;
+        })
+        .join('')}
+       ${pagedPosts.data
+         .map(({ slug, modifiedAt: modifedAt }) => {
            return `
          <url>
-             <loc>${baseUrl}${slug}</loc>
+             <loc>${settings.baseUrl}blog${slug}</loc>
              <lastmod>${dayjs(modifedAt).format(sitemapDateFormat)}</lastmod>
          </url>
        `;
          })
          .join('')}
+         ${pagedPages.data
+          .map(({ slug, modifiedAt: modifedAt }) => {
+            return `
+          <url>
+              <loc>${settings.baseUrl}${slug}</loc>
+              <lastmod>${dayjs(modifedAt).format(sitemapDateFormat)}</lastmod>
+          </url>
+        `;
+          })
+          .join('')}
      </urlset>
    `;
   }
