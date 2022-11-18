@@ -49,30 +49,41 @@ const BlogPage: NextPage<BlogPageProps> = ( { layoutProps, posts, currentPage: c
 export default BlogPage;
 
 export const getServerSideProps: GetServerSideProps<BlogPageProps, BlogPageUrlQuery> = async (context: GetServerSidePropsContext<BlogPageUrlQuery>): Promise<GetServerSidePropsResult<BlogPageProps>> => {
-  const settings = await getSettings();
-  const layoutProps: LayoutProps = {
-    ...settings,
-    imageUrl: settings.coverImageUrl,
-    path: 'blog',
-   };
 
-   let page = parseInt(context.query.page as string ?? '1');
-   if (isNaN(page) || page < 1) {
+  let page = parseInt(context.query.page as string ?? '1');
+  if (isNaN(page) || page < 1) {
     page = 1;
-   }
+  }
 
-   const posts = await getBlogPostsPaged(
+  const posts = await getBlogPostsPaged(
     { type: BlogPostType.Post, status: BlogPostStatus.Published },
     { publishedAt: -1 },
     (page - 1) * DEFAULT_PAGE_SIZE,
     DEFAULT_PAGE_SIZE);
+
+  const totalPages = posts.total / DEFAULT_PAGE_SIZE
+
+  const settings = await getSettings();
+  const layoutProps: LayoutProps = {
+    ...settings,
+    imageUrl: settings.coverImageUrl,
+    path: context.query.page ? `blog?page=${page}` : 'blog',
+  };
+
+  if (page > 1) {
+    layoutProps.prev = `blog?page=${page - 1}`;
+  }
+
+  if (page < totalPages) {
+    layoutProps.next = `blog?page=${page + 1}`;
+  }
 
   return {
     props: {
       layoutProps: ensureSerializable(layoutProps),
       posts: ensureSerializable(posts),
       currentPage: page,
-      totalPages: posts.total / DEFAULT_PAGE_SIZE,
+      totalPages: totalPages,
       pageSize: DEFAULT_PAGE_SIZE,
     }
   }
