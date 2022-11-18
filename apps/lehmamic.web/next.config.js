@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require('@nrwl/next/plugins/with-nx');
 const withBunyan = require('next-bunyan');
+const { withPlausibleProxy } = require('next-plausible')
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
@@ -74,4 +75,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withBunyan(withNx(nextConfig));
+module.exports = withPlausibleProxy(withBunyan(withNx(nextConfig)));
