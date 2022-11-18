@@ -4,11 +4,18 @@ import '@utils/dayjs.plugins';
 
 import { BlogPost, BlogPostStatus, BlogPostType, BLOGPOSTS_COLLECTION } from '@models/blog-post';
 import { connectToMongoDb } from '@utils/mongodb';
-import { ObjectId } from 'mongodb';
+import { ObjectId, Sort } from 'mongodb';
+import { PaginationResult } from '@models/pagination-result';
 
 export interface BlogPostFilter {
   type?: BlogPostType,
   status?: BlogPostStatus;
+}
+
+export interface PagedBlogPosts {
+  data: BlogPost[],
+  totalCount: { count: number; }[]
+
 }
 
 export const getBlogPosts = async (filter: BlogPostFilter = { }): Promise<BlogPost[]> => {
@@ -18,6 +25,29 @@ export const getBlogPosts = async (filter: BlogPostFilter = { }): Promise<BlogPo
     .toArray();
 
   return posts;
+}
+
+export const getBlogPostsPaged = async (filter: BlogPostFilter = { }, sort: Sort = { publishedAt: -1 }, skip = 0, limit = 100): Promise<PaginationResult<BlogPost>> => {
+  const { db } = await connectToMongoDb();
+    const pagedPosts = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+      .aggregate<{
+        totalData: BlogPost[],
+        totalCount: { count: number; }[]
+      }>([
+        { "$match": filter},
+        { "$facet": {
+          "totalData": [
+            { "$match": {}},
+            { "$skip": skip },
+            { "$limit": limit }
+          ],
+          "totalCount": [
+            { "$count": "count" }
+          ]
+        }}
+      ])
+      .toArray();
+  return { data: pagedPosts[0].totalData, total: pagedPosts[0].totalCount[0].count };
 }
 
 export const getBlogPostBySlug = async (slug: string | undefined): Promise<BlogPost | null> => {

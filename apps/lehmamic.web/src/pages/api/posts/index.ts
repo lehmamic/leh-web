@@ -1,7 +1,8 @@
+import { getBlogPostsPaged } from './../../../services/blog-post.service';
 import HttpStatus from 'http-status-codes';
 
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
-import { BlogPostFilter, createBlogPost, getBlogPosts } from '@services/blog-post.service';
+import { BlogPostFilter, createBlogPost } from '@services/blog-post.service';
 import { BlogPostType, BlogPostStatus, CreateOrUpdateBlogPostRequest } from '@models/blog-post';
 import { withApiAuthRequired } from '@auth0/nextjs-auth0';
 
@@ -19,9 +20,9 @@ handler.get(withApiAuthRequired(async (req, res) => {
     filter.status = status as BlogPostStatus;
   }
 
-  const posts = await getBlogPosts(filter);
+  const posts = await getBlogPostsPaged(filter);
 
-  res.status(HttpStatus.OK).json(posts);
+  res.status(HttpStatus.OK).json(posts.data);
 }));
 
 // const validate = withValidation({
