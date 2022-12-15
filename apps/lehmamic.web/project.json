@@ -1,4 +1,6 @@
 {
+  "name": "lehmamic.web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/lehmamic.web",
   "projectType": "application",
   "targets": {
@@ -11,7 +13,9 @@
         "outputPath": "dist/apps/lehmamic.web"
       },
       "configurations": {
-        "development": {},
+        "development": {
+          "outputPath": "apps/lehmamic.web"
+        },
         "production": {}
       }
     },
@@ -41,7 +45,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/lehmamic.web"],
+      "outputs": ["{workspaceRoot}/coverage/apps/lehmamic.web"],
       "options": {
         "jestConfig": "apps/lehmamic.web/jest.config.ts",
         "passWithNoTests": true

@@ -23,9 +23,16 @@
       "@styles/*": ["src/styles/*"],
       "@hooks/*": ["src/hooks/*"],
       "@environment/*": ["src/environment/*"],
-      "@root/*": ["src/*"],
+      "@root/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", "src/pages/api/posts/[id].ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
+    "next-env.d.ts",
+    "src/pages/api/posts/[id].ts"
+  ],
   "exclude": ["node_modules", "jest.config.ts"]
 }
