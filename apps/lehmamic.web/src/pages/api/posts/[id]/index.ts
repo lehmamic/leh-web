@@ -1,7 +1,5 @@
 import HttpStatus from 'http-status-codes';
-import { withValidation } from 'next-validations';
 
-import { BlogPostValidator } from '@models/blog-post.validator';
 import { deleteBlogPost, getBlogPostById, updateBlogPost } from '@services/blog-post.service';
 import { nextConnectRequestHandler } from '@utils/http/next-connect-request-handler';
 import { CreateOrUpdateBlogPostRequest } from '@models/blog-post';

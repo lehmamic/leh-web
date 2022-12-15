@@ -1,18 +1,15 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from 'next';
 import { useMemo } from 'react';
 
 import { getBlogPostBySlug } from '@services/blog-post.service';
 import { getSettings } from '@services/settings.service';
 import { ensureSerializable } from '@utils/serialization';
-import { BlogPost, BlogPostType } from '@models/blog-post';
-import { ParsedUrlQuery } from 'querystring';
+import { BlogPost } from '@models/blog-post';
 import { extractBlogPostDescription, markdownToReact } from '@utils/transform-content';
 import { Layout, LayoutProps } from '@components/Layout';
 import { User } from '@models/user';
 import { getUsersById } from '@services/user.service';
-import { PostMetadata } from '@components/post/PostMetadata';
-import { PostTags } from '@components/post/PostTags';
 
 interface AboutPageProps {
   layoutProps: LayoutProps;

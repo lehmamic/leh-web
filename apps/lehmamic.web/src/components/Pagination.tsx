@@ -1,4 +1,4 @@
-import { Box, ButtonBase, IconButton } from '@mui/material';
+import { Box } from '@mui/material';
 import { ArrowLeft, ArrowRight } from 'mdi-material-ui';
 import { useRouter } from 'next/router';
 import * as React from 'react';

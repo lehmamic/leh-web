@@ -1,4 +1,4 @@
-import { Typography, CardContent, Card, CardMedia, CardActions, Chip, SxProps, Theme, Box } from '@mui/material';
+import { Typography, CardContent, Card, CardMedia, CardActions, SxProps, Theme, Box } from '@mui/material';
 import * as React from 'react';
 import dayjs from 'dayjs';
 

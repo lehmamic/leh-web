@@ -6,11 +6,6 @@ export interface SocialMedia {
   icon: React.ElementType;
 }
 
-interface NavItem {
-  url: string;
-  label: string;
-}
-
 export const extractSocialMedia = (
   baseUrl: string,
   socialMedia: { twitter?: string; facebook?: string; linkedIn?: string; github?: string; },

@@ -125,6 +125,7 @@ export const BlogPostForm: React.FC<BlogPostFormProps> = ({ tags, post, baseUrl,
     <Box sx={() => [
       { display: 'flex', flexDirection: 'column', width: '100%', height: '100%' },
       ...(Array.isArray(sx) ? sx : [sx]),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ] as any}>
     <Box sx={(theme) => ({ display: 'flex', flex: '0 0 auto', alignItems: 'center', mt: theme.spacing(3), px: theme.spacing(3) })}>
       <Button sx={{ display: 'inline-flex' }} onClick={navigateBack}>
