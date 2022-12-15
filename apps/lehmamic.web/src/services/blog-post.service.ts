@@ -29,24 +29,24 @@ export const getBlogPosts = async (filter: BlogPostFilter = { }): Promise<BlogPo
 
 export const getBlogPostsPaged = async (filter: BlogPostFilter = { }, sort: Sort = { publishedAt: -1 }, skip = 0, limit = 100): Promise<PaginationResult<BlogPost>> => {
   const { db } = await connectToMongoDb();
-    const pagedPosts = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
-      .aggregate<{
-        totalData: BlogPost[],
-        totalCount: { count: number; }[]
-      }>([
-        { "$match": filter},
-        { "$facet": {
-          "totalData": [
-            { "$match": {}},
-            { "$skip": skip },
-            { "$limit": limit }
-          ],
-          "totalCount": [
-            { "$count": "count" }
-          ]
-        }}
-      ])
-      .toArray();
+  const pagedPosts = await db.collection<BlogPost>(BLOGPOSTS_COLLECTION)
+    .aggregate<{
+      totalData: BlogPost[],
+      totalCount: { count: number; }[]
+    }>([
+      { "$match": filter},
+      { "$facet": {
+        "totalData": [
+          { "$match": {}},
+          { "$skip": skip },
+          { "$limit": limit }
+        ],
+        "totalCount": [
+          { "$count": "count" }
+        ]
+      }}
+    ])
+    .toArray();
   return { data: pagedPosts[0].totalData, total: pagedPosts[0].totalCount[0].count };
 }
 
