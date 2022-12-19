@@ -12,7 +12,7 @@ import createEmotionCache from '../utils/createEmotionCache';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import './prism-vsc-dark-plus.css';
-import { UserProvider } from '@auth0/nextjs-auth0';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import PlausibleProvider from 'next-plausible';
 
 // Client-side cache, shared for the whole session of the user in the browser.

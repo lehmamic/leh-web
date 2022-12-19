@@ -1,4 +1,5 @@
-import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import { LayoutProps } from "@components/Layout";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
 import { useBlogPostById } from "@hooks/useBlogPostById";

@@ -8,7 +8,7 @@ import { ensureSerializable } from "@utils/serialization";
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult, NextPage } from "next";
 import { getStatusDisplayName } from "@models/blog-post.utils";
 import { useRouter } from "next/router";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 
 interface ManageBlogPostsPageProps {
   layoutProps: LayoutProps;

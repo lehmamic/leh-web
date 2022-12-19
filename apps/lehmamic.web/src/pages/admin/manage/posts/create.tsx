@@ -5,10 +5,11 @@ import { ensureSerializable } from "@utils/serialization";
 import { CreateOrUpdateBlogPostRequest } from "@models/blog-post";
 import { useCreateBlogPost } from "@hooks/useCreateBlogPost";
 import { useRouter } from "next/router";
-import { withPageAuthRequired, useUser } from "@auth0/nextjs-auth0";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { useTags } from "@hooks/useTags";
 import { useUsers } from "@hooks/useUsers";
 import { BlogPostForm, FormData } from "@components/post/BlogPostForm";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface CreateBlogPostsPageProps {
   layoutProps: LayoutProps;

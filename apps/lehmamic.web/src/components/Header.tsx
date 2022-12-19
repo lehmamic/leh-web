@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Typography, AppBar, Toolbar, Container, IconButton, Menu, Divider, SxProps, Theme } from '@mui/material';
 import { Box } from '@mui/system';
 import { navItems } from '@utils/navItem';
