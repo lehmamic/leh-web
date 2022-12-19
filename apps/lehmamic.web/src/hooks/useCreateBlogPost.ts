@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useMutation, UseMutationResult } from 'react-query';
+import { useMutation, UseMutationResult } from '@tanstack/react-query';
 
 import { environment } from '../environment/environment';
 import { BlogPost, CreateOrUpdateBlogPostRequest } from '@models/blog-post';

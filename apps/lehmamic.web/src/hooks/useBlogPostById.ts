@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { environment } from '@environment/environment';
 import { BlogPost } from '@models/blog-post';
